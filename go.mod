@@ -1,4 +1,4 @@
-module go-infer
+module github.com/jack139/go-infer
 
 go 1.18
 
