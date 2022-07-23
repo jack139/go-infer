@@ -1,0 +1,27 @@
+
+# HTTP 服务端参数
+API:
+    Port: 5000
+    Addr: 0.0.0.0
+    AppIdSecret: { # 接口调用分配的 appid 和 sevret
+        "19E179E5DC29C05E65B90CDE57A1C7E5" : "D91CEB11EE62219CD91CEB11EE62219C",
+        "66A095861BAE55F8735199DBC45D3E8E" : "43E554621FF7BF4756F8C1ADF17F209C",
+        "75C50F018B34AC0240915EC685F5961B" : "BCB3DF17A794368E1BB0352D3D2D5F50",
+        "3EA25569454745D01219080B779F021F" : "41DF0E6AE27B5282C07EF5124642A352",
+    }
+
+# 推理服务队列的参数
+Server:
+    RedisServer: "127.0.0.1:7480"
+    RedisPasswd: "e18ffb7484f4d69c2acb40008471a71c"
+    QueueName: "goinfer-synchronous-asynchronous-queue"
+    RequestQueueAmount: 1 # 请求队列数量，要启动相同数量的server
+    MessageTimeout: 10 # 推理计算最大等待时间
+    MaxWorkers: 8 # 模型推理最大并发数
+
+# 自定义参数
+Customer: { # 以下 key-value 为用户自定义使用
+    # 预训练模型路径 
+    "BertModelPath" : "../../nlp/qa_demo/saved-model",
+    "BertVocabPath" : "../../nlp/qa_demo/saved-model/vocab_chinese.txt",
+}
