@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"github.com/spf13/cobra"
 
-	"go-infer/http"
-	"go-infer/server"
-	"go-infer/types"
+	"github.com/jack139/go-infer/http"
+	"github.com/jack139/go-infer/server"
+	"github.com/jack139/go-infer/types"
 )
 
 var (

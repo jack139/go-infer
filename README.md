@@ -17,7 +17,7 @@ make
 ### 启动 dispatcher
 
 ```
-build/go-infer-emxaples server 0
+build/go-infer server 0
 ```
 
 
@@ -25,7 +25,7 @@ build/go-infer-emxaples server 0
 ### 启动 http
 
 ```
-build/go-infer-emxaples http
+build/go-infer http
 ```
 
 

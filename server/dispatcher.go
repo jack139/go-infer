@@ -8,8 +8,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"go-infer/helper"
-	"go-infer/types"
+	"github.com/jack139/go-infer/helper"
+	"github.com/jack139/go-infer/types"
 )
 
 var (

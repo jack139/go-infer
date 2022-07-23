@@ -6,8 +6,8 @@ import (
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 
-	"go-infer/helper"
-	"go-infer/types"
+	"github.com/jack139/go-infer/helper"
+	"github.com/jack139/go-infer/types"
 )
 
 
