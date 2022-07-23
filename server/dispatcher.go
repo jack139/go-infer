@@ -8,8 +8,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"antigen-go/go-infer/helper"
-	"antigen-go/go-infer/types"
+	"go-infer/helper"
+	"go-infer/types"
 )
 
 var (

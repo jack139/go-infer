@@ -3,8 +3,8 @@ package http
 import (
 	"github.com/valyala/fasthttp"
 
-	"antigen-go/go-infer/helper"
-	"antigen-go/go-infer/types"
+	"go-infer/helper"
+	"go-infer/types"
 )
 
 

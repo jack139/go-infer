@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"github.com/spf13/cobra"
 
-	"antigen-go/go-infer/http"
-	"antigen-go/go-infer/server"
-	"antigen-go/go-infer/types"
+	"go-infer/http"
+	"go-infer/server"
+	"go-infer/types"
 )
 
 var (

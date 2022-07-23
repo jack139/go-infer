@@ -16,8 +16,8 @@ import (
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "antigen-go",
-		Short: "antigen to detect gen-test result",
+		Use:   "go-infer",
+		Short: "go-infer examples",
 	}
 )
 

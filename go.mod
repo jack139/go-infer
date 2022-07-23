@@ -1,4 +1,4 @@
-module antigen-go
+module go-infer
 
 go 1.18
 
