@@ -40,13 +40,13 @@ if __name__ == '__main__':
         }
     }
 
-    appid = '66A095861BAE55F8735199DBC45D3E8E'
+    appid = '3EA25569454745D01219080B779F021F'
     unixtime = int(time.time())
     body['timestamp'] = unixtime
     body['appId'] = appid
 
     param_str = gen_param_str(body)
-    sign_str = '%s&key=%s' % (param_str, '43E554621FF7BF4756F8C1ADF17F209C')
+    sign_str = '%s&key=%s' % (param_str, '41DF0E6AE27B5282C07EF5124642A352')
 
     #print(sign_str)
 
