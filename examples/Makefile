@@ -8,6 +8,7 @@ build: go.sum
 
 go.sum: go.mod
 	@echo "Ensure dependencies have not been modified"
+	@go mod tidy
 	@GO111MODULE=on go mod verify
 
 clean:
