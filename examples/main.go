@@ -23,8 +23,6 @@ var (
 
 func init() {
 	// 添加模型实例
-	types.ModelList = append(types.ModelList, &qa.BertQA{})
-	types.ModelList = append(types.ModelList, &echo.EchoModel{})
 	types.ModelList = append(types.ModelList, &embedding.BertEMB{})
 
 	// 添加 api 入口
