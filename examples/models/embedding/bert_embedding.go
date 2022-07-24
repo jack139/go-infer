@@ -11,11 +11,6 @@ import (
 	"github.com/jack139/go-infer/helper"
 )
 
-const (
-	apiPath = "/api/embedding"
-	MaxSeqLength = 512
-)
-
 /* 训练好的模型权重 */
 var (
 	m *tf.SavedModel
@@ -51,7 +46,7 @@ func (x *BertEMB) Init() error {
 }
 
 func (x *BertEMB) ApiPath() string {
-	return apiPath
+	return "/api/embedding"
 }
 
 func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
@@ -65,7 +60,7 @@ func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interfa
 
 	// 构建请求参数
 	reqDataMap := map[string]interface{}{
-		"api": apiPath,
+		"api": x.ApiPath(),
 		"params": map[string]interface{}{
 			"text": text,
 		},
@@ -79,6 +74,8 @@ func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interfa
 func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Infer_BertQA")
 
+	const MaxSeqLength = 512
+
 	text := (*reqData)["text"].(string)
 
 	tkz := tokenize.NewTokenizer(voc)
@@ -90,11 +87,7 @@ func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{
 	if err != nil {
 		return &map[string]interface{}{"code":2001}, err
 	}
-	new_mask := make([]float32, len(f.Mask))
-	for i, v := range f.Mask {
-		new_mask[i] = float32(v)
-	}
-	mask, err := tf.NewTensor([][]float32{new_mask})
+	mask, err := tf.NewTensor([][]int32{f.Mask})
 	if err != nil {
 		return &map[string]interface{}{"code":2002}, err
 	}
@@ -110,7 +103,7 @@ func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{
 			m.Graph.Operation("segment_ids").Output(0):    sids,
 		},
 		[]tf.Output{
-			m.Graph.Operation("finetune_mrc/Squeeze").Output(0),
+			m.Graph.Operation("bert/pooler/Squeeze").Output(0),
 		},
 		nil,
 	)
@@ -119,5 +112,5 @@ func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{
 	}
 
 	ret := res[0].Value().([][]float32)
-	return &map[string]interface{}{"data":ret[0]}, nil
+	return &map[string]interface{}{"embeddings":ret[0]}, nil
 }

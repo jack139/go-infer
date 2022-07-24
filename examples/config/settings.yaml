@@ -19,6 +19,6 @@ Server:
 # 自定义参数
 Customer: { # 以下 key-value 为用户自定义使用
     # 预训练模型路径 
-    "BertModelPath" : "../../qa_demo/saved-model",
-    "BertVocabPath" : "../../qa_demo/saved-model/vocab_chinese.txt",
+    "BertModelPath" : "export/outputs/saved-model",
+    "BertVocabPath" : "export/outputs/vocab.txt",
 }
