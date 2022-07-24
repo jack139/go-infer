@@ -8,8 +8,6 @@ import (
 	"github.com/jack139/go-infer/cli"
 	"github.com/jack139/go-infer/types"
 
-	"examples/models/echo"
-	"examples/models/qa"
 	"examples/models/embedding"
 )
 

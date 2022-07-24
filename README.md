@@ -6,18 +6,10 @@
 
 
 
-### 编译
-
-```
-make
-```
-
-
-
 ### 启动 dispatcher
 
 ```
-build/go-infer server 0
+go test -v -run TestServer
 ```
 
 
@@ -25,7 +17,7 @@ build/go-infer server 0
 ### 启动 http
 
 ```
-build/go-infer http
+go test -v -run TestHttp
 ```
 
 
@@ -33,5 +25,6 @@ build/go-infer http
 ### 测试脚本
 
 ```
+cd examples
 python3 test_api.py 127.0.0.1 _
 ```
