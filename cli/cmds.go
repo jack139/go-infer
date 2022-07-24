@@ -7,7 +7,6 @@ import (
 
 	"github.com/jack139/go-infer/http"
 	"github.com/jack139/go-infer/server"
-	"github.com/jack139/go-infer/types"
 )
 
 var (

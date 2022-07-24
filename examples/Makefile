@@ -4,7 +4,7 @@ all: clean build
 
 build: go.sum
 	@echo "Building ..."
-	@go build -o $(BUILD)/go-infer
+	@go build -o $(BUILD)/go-embedding
 
 go.sum: go.mod
 	@echo "Ensure dependencies have not been modified"
