@@ -55,12 +55,12 @@ func (x *BertEMB) ApiPath() string {
 }
 
 func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
-	log.Println("Api_BertEMB")
+	log.Println("ApiEntry_BertEMB")
 
 	// 检查参数
 	text, ok := (*reqData)["text"].(string)
 	if !ok {
-		return &map[string]interface{}{"code":9101}, fmt.Errorf("need text")
+		return &map[string]interface{}{"code":1001}, fmt.Errorf("need text")
 	}
 
 	// 构建请求参数
@@ -71,35 +71,7 @@ func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interfa
 		},
 	}
 
-	requestId := helper.GenerateRequestId()
-
-	// 注册消息队列，在发redis消息前注册, 防止消息漏掉
-	pubsub := helper.Redis_subscribe(requestId)
-	defer pubsub.Close()
-
-	// 发 请求消息
-	err := helper.Redis_publish_request(requestId, &reqDataMap)
-	if err!=nil {
-		return &map[string]interface{}{"code":9103}, err
-	}
-
-	// 收 结果消息
-	respData, err := helper.Redis_sub_receive(pubsub)
-	if err!=nil {
-		return &map[string]interface{}{"code":9104}, err
-	}
-
-	// code==0 提交成功
-	if (*respData)["code"].(float64)!=0 { 
-		return &map[string]interface{}{"code":int((*respData)["code"].(float64))}, fmt.Errorf((*respData)["msg"].(string))
-	}
-
-	// 返回区块id
-	resp := map[string]interface{}{
-		"data" : (*respData)["data"].([]interface{}),  // data 数据
-	}
-
-	return &resp, nil
+	return &reqDataMap, nil
 }
 
 
@@ -116,7 +88,7 @@ func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{
 
 	tids, err := tf.NewTensor([][]int32{f.TokenIDs})
 	if err != nil {
-		return nil, err
+		return &map[string]interface{}{"code":2001}, err
 	}
 	new_mask := make([]float32, len(f.Mask))
 	for i, v := range f.Mask {
@@ -124,11 +96,11 @@ func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{
 	}
 	mask, err := tf.NewTensor([][]float32{new_mask})
 	if err != nil {
-		return nil, err
+		return &map[string]interface{}{"code":2002}, err
 	}
 	sids, err := tf.NewTensor([][]int32{f.TypeIDs})
 	if err != nil {
-		return nil, err
+		return &map[string]interface{}{"code":2003}, err
 	}
 
 	res, err := m.Session.Run(
@@ -143,7 +115,7 @@ func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{
 		nil,
 	)
 	if err != nil {
-		return nil, err
+		return &map[string]interface{}{"code":2004}, err
 	}
 
 	ret := res[0].Value().([][]float32)

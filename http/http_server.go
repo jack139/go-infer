@@ -17,9 +17,10 @@ func RunServer() {
 	/* router */
 	r := router.New()
 	r.GET("/", index)
-	for path := range types.EntryMap {
-		r.POST(path, apiEntry)
-		log.Println("router added: ", path)
+	/* 添加模型定义的api入口 */
+	for m := range types.ModelList {
+		r.POST(types.ModelList[m].ApiPath(), apiEntry)
+		log.Println("router added: ", types.ModelList[m].ApiPath())
 	}
 
 	host := fmt.Sprintf("%s:%d", helper.Settings.Api.Addr, helper.Settings.Api.Port)

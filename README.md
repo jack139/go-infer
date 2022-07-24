@@ -26,5 +26,5 @@ go test -v -run TestHttp
 
 ```
 cd examples
-python3 test_api.py 127.0.0.1 _
+python3 test_api.py 127.0.0.1 echo
 ```

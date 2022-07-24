@@ -14,19 +14,14 @@ import (
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "go-infer",
-		Short: "go-infer examples",
+		Use:   "go-embedding",
+		Short: "go-embedding examples",
 	}
 )
 
 func init() {
 	// 添加模型实例
 	types.ModelList = append(types.ModelList, &embedding.BertEMB{})
-
-	// 添加 api 入口
-	for m := range types.ModelList {
-		types.EntryMap[types.ModelList[m].ApiPath()] = types.ModelList[m].ApiEntry
-	}
 
 	// 命令行设置
 	rootCmd.CompletionOptions.DisableDefaultCmd = true

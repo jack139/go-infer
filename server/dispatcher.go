@@ -24,6 +24,13 @@ func init(){
 }
 
 func RunServer(queueNum string){
+	// 初始化模型
+	for m := range types.ModelList {
+		if err := types.ModelList[m].Init(); err != nil {
+			log.Fatal("Init deep model fail: ", types.ModelList[m].ApiPath(), err.Error())
+		}
+	}
+
 	// 启动 分发服务
 	go dispatcher(queueNum)
 
@@ -120,13 +127,17 @@ func porcessApi(payload string) (string, string, error) {
 			}
 			ret, err := types.ModelList[m].Infer(&params)
 			if err!=nil {
-				retJson["code"] = 9002
+				retJson["code"] = 9101 // 默认返回错误代码
 				retJson["msg"] = err.Error()
+				if ret!=nil {
+					if code, ok := (*ret)["code"].(int); ok { // infer() 有带回错误代码
+						retJson["code"] = code
+					}
+				}
 			} else {
 				retJson["code"] = 0
-				retJson["data"] = (*ret)["data"]
+				retJson["data"] = *ret
 			}
-
 			break
 		}
 	} 
@@ -134,7 +145,7 @@ func porcessApi(payload string) (string, string, error) {
 	if retJson["code"] == -1 {
 		log.Println("faceSearch() unknown api:", data["api"])
 		result = []byte("{\"code\":-2}")
-		retJson["code"] = 9001
+		retJson["code"] = 9109
 		retJson["msg"] = "unknown api"		
 	}
 
