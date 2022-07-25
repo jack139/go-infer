@@ -26,6 +26,8 @@
 ## TODO
 
 - [ ] api验签支持SM2算法
-- [ ] examples增加CNN模型推理示例
-- [ ] examples增加Keras模型权重转换示例
-- [ ] examples增加PyTorch模型权重转换示例
+- [x] BERT模型推理示例
+- [ ] CNN模型推理示例
+- [x] Tensorflow模型权重转换示例
+- [ ] Keras模型权重转换示例
+- [ ] PyTorch模型权重转换示例
