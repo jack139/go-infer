@@ -135,8 +135,10 @@ func porcessApi(payload string) (string, string, error) {
 					}
 				}
 			} else {
+				//retJson["code"] = 0
+				//retJson["data"] = *ret
+				retJson = *ret
 				retJson["code"] = 0
-				retJson["data"] = *ret
 			}
 			break
 		}

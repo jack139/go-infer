@@ -42,11 +42,14 @@ func (x *EchoModel) ApiEntry(reqData *map[string]interface{}) (*map[string]inter
 func (x *EchoModel) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Model Infer()", x.ApiPath())
 	retData, ok := (*reqData)["data"].(map[string]interface{})
-	if ok {
-		return &retData, nil
-	} else {
+	if !ok {
 		return nil, fmt.Errorf("retrieve response data fail") // 错误返回： 错误代码，错误信息	
 	}
+
+	log.Println("infer return data: ", retData)
+
+	return &retData, nil
+	//return &map[string]interface{}{"code":9998}, fmt.Errorf("infer error test") // 错误返回： 错误代码，错误信息
 }
 
 

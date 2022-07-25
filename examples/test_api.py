@@ -33,7 +33,6 @@ if __name__ == '__main__':
         'encType'  : 'plain',
         'data'     : {
             #'image'    : base64.b64encode(img_data).decode('utf-8'),
-            'image'    : '',
             'text'     : "测试测试",
         }
     }
