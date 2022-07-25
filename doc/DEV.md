@@ -64,7 +64,7 @@ rootCmd.AddCommand(cli.ServerCmd)
 
 #### (1) Tensorflow权重导出
 
-可参考examples/export路径下convert_bert_to_pb.py
+可参考[convert_bert_to_pb.py](../examples/export/convert_bert_to_pb.py)
 
 
 
