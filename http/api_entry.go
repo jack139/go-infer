@@ -16,7 +16,8 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 	// 验签
 	data, err := checkSign(content)
 	if err != nil {
-		respError(ctx, 9000, err.Error())
+		code, _ := (*data)["code"].(int) // data() 有带回错误代码
+		respError(ctx, code, err.Error())
 		return
 	}
 
@@ -35,7 +36,7 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 				return
 			}
 
-			requestId := helper.GenerateRequestId()
+			requestId := generateRequestId()
 
 			// 注册消息队列，在发redis消息前注册, 防止消息漏掉
 			pubsub := helper.Redis_subscribe(requestId)

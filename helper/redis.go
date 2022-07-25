@@ -1,49 +1,20 @@
 package helper
 
 import (
-	"fmt"
 	"log"
 	"time"
 	"context"
 	"strconv"
-	"encoding/json"
 	"math/rand"
-	"crypto/md5"
+	"encoding/json"
 	"github.com/go-redis/redis/v8"
 )
 
 var (
+	// Local redis client
+	// settings of redis server are in settings.yaml file
 	Rdb *redis.Client
-
-	/* 随即字符串的字母表 */
-	letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 )
-
-func init(){
-	// 初始化随机数发生器
-	rand.Seed(time.Now().UnixNano())
-}
-
-
-/* 产生随机串 */
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
-}
-
-/* 产生 request id */
-func GenerateRequestId() string {
-	year, month, day := time.Now().Date()
-	h := md5.New()
-	h.Write([]byte(randSeq(10)))
-	sum := h.Sum(nil)
-	md5Str := fmt.Sprintf("%4d%02d%02d%x", year, month, day, sum)
-	return md5Str
-}
-
 
 func redis_init() error {
 	Rdb = redis.NewClient(&redis.Options{
@@ -61,7 +32,7 @@ func redis_init() error {
 	return nil
 }
 
-// 发布消息
+// Publish message to redis queue by queue name
 func Redis_publish(queue string, message string) error {
 	if queue=="NO_RECIEVER" {
 		return nil
@@ -82,7 +53,7 @@ func choose_queue_random() string {
 	return strconv.Itoa(rand.Intn(Settings.Redis.REQUEST_QUEUE_NUM))
 }
 
-// 发布 请求数据 到 处理队列
+// Publish request data to redis queue by request ID
 func Redis_publish_request(requestId string, data *map[string]interface{}) error {
 	msgBodyMap := map[string]interface{}{
 		"request_id": requestId,
@@ -101,12 +72,12 @@ func Redis_publish_request(requestId string, data *map[string]interface{}) error
 }
 
 
-// 订阅消息
+// Subscribe redis message by request ID
 func Redis_subscribe(requestId string) *redis.PubSub {
 	return Rdb.Subscribe(context.Background(), requestId)
 }
 
-// 接受订阅的消息，只收一条
+// Receive one message by provided *redis.pubsub
 func Redis_sub_receive(pubsub *redis.PubSub) (*map[string]interface{}, error) {
 	var retBytes []byte
 	startTime := time.Now().Unix()

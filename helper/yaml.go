@@ -1,3 +1,4 @@
+// Package provides some helping funcs, suchs as redis-related and settings parsing
 package helper
 
 import (
@@ -30,6 +31,7 @@ type configYaml struct{
 	Customer map[string]string `yaml:"Customer"` 
 }
 
+// Settings read from local YAML setting file located in 'config/settings.yaml'
 var Settings = configYaml{}
 
 func readSettings(){

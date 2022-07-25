@@ -1,3 +1,4 @@
+// Package to provide command-line settings
 package cli
 
 import (
@@ -10,7 +11,7 @@ import (
 )
 
 var (
-	// http 服务
+	// Command to start a HTTP server
 	HttpCmd = &cobra.Command{
 		Use:   "http",
 		Short: "start http service",
@@ -22,7 +23,7 @@ var (
 		},
 	}
 
-	// Dispatcher server
+	// Command to start a Dispatcher server
 	ServerCmd = &cobra.Command{
 		Use:   "server <queue No.>",
 		Short: "start dispatcher service",

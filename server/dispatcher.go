@@ -1,3 +1,5 @@
+// Package to run dispatcher server of model inference service
+// the inference service is implemented by goroutine, created when request coming.
 package server
 
 import (
@@ -23,6 +25,7 @@ func init(){
 	log.Println("Dispatcher init(), MAX_WORKERS=", helper.Settings.Redis.MAX_WORKERS)
 }
 
+// Start a Dispatcher server for model inference service
 func RunServer(queueNum string){
 	// 初始化模型
 	for m := range types.ModelList {

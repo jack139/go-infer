@@ -2,6 +2,7 @@ package http
 
 import (
 	"crypto/sha256"
+	"crypto/md5"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -10,6 +11,8 @@ import (
 	"strconv"
 	"time"
 	"os"
+	"math"
+	"math/rand"
 
 	"github.com/valyala/fasthttp"
 	"github.com/ferluci/fast-realip"
@@ -24,8 +27,15 @@ var (
 	/* 返回值的 content-type */
 	strContentType     = []byte("Content-Type")
 	strApplicationJSON = []byte("application/json")
+
+	/* 随即字符串的字母表 */
+	letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 )
 
+func init(){
+	// 初始化随机数发生器
+	rand.Seed(time.Now().UnixNano())
+}
 
 /* 处理返回值，返回json */
 func respJson(ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
@@ -74,7 +84,7 @@ func doJSONWrite(ctx *fasthttp.RequestCtx, code int, obj interface{}) {
 func checkSign(content []byte) (*map[string]interface{}, error) {
 	fields := make(map[string]interface{})
 	if err := json.Unmarshal(content, &fields); err != nil {
-		return nil, err
+		return &map[string]interface{}{"code":9801}, err
 	}
 
 	var appId, version, signType, signData string
@@ -84,40 +94,45 @@ func checkSign(content []byte) (*map[string]interface{}, error) {
 
 	// 检查参数
 	if appId, ok = fields["appId"].(string); !ok {
-		return nil, fmt.Errorf("need appid")
+		return &map[string]interface{}{"code":9801}, fmt.Errorf("need appid")
 	}
 	if version, ok = fields["version"].(string); !ok {
-		return nil, fmt.Errorf("need version")
+		return &map[string]interface{}{"code":9801}, fmt.Errorf("need version")
 	}
 	if signType, ok = fields["signType"].(string); !ok {
-		return nil, fmt.Errorf("need sign_type")
+		return &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_type")
 	}
 	if signData, ok = fields["signData"].(string); !ok {
-		return nil, fmt.Errorf("need sign_data")
+		return &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_data")
 	}
 	if _, ok = fields["timestamp"].(float64); !ok {
-		return nil, fmt.Errorf("need timestamp")
+		return &map[string]interface{}{"code":9801}, fmt.Errorf("need timestamp")
 	} else {
 		timestamp = int64(fields["timestamp"].(float64)) // 返回整数
 	}
 	if data, ok = fields["data"].(map[string]interface{}); !ok {
-		return nil, fmt.Errorf("need data")
+		return &map[string]interface{}{"code":9801}, fmt.Errorf("need data")
+	}
+
+	// 调用时间不能超过前后5分钟
+	if math.Abs(float64(time.Now().Unix()-timestamp))>300 {
+		return &map[string]interface{}{"code":9802}, fmt.Errorf("wrong timestamp")
 	}
 
 	// 获取 secret，用户密钥的签名串
 	secret, ok := helper.Settings.Api.SECRET_KEY[appId]
 	if !ok {
-		return nil, fmt.Errorf("wrong appId")
+		return &map[string]interface{}{"code":9805}, fmt.Errorf("wrong appId")
 	}
 
 	// 检查版本
 	if version != "1" {
-		return nil, fmt.Errorf("wrong version")
+		return &map[string]interface{}{"code":9806}, fmt.Errorf("wrong version")
 	}
 
 	// 检查签名类型
 	if signType != "SHA256" {
-		return nil, fmt.Errorf("unknown signType")
+		return &map[string]interface{}{"code":9803}, fmt.Errorf("unknown signType")
 	}
 
 	// 生成参数的key，并排序
@@ -155,7 +170,7 @@ func checkSign(content []byte) (*map[string]interface{}, error) {
 	if signStr != signData {
 		fmt.Println(signStr)
 		fmt.Println(signData)
-		return nil, fmt.Errorf("wrong signature")
+		return &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
 	}
 
 	return &data, nil
@@ -202,4 +217,23 @@ func getMapKeys(m map[string]interface{}) *[]string {
 		keys = append(keys, k)
 	}
 	return &keys
+}
+
+/* 产生随机串 */
+func randSeq(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
+/* 产生 request id */
+func generateRequestId() string {
+	year, month, day := time.Now().Date()
+	h := md5.New()
+	h.Write([]byte(randSeq(10)))
+	sum := h.Sum(nil)
+	md5Str := fmt.Sprintf("%4d%02d%02d%x", year, month, day, sum)
+	return md5Str
 }

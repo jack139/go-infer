@@ -1,3 +1,5 @@
+// Package to run a Http server to provide API service
+// the http server is implemented by valyala/fasthttp
 package http
 
 import (
@@ -11,7 +13,7 @@ import (
 )
 
 
-/* 入口 */
+// start a HTTP service of API
 func RunServer() {
 
 	/* router */
