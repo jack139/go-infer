@@ -17,5 +17,14 @@
 
 ## 开发文档
 
-[API 接口定义](doc/API.md)
+[开发指南](doc/DEV.md)
+[API文档模板](doc/API.md)
 
+
+
+## TODO List
+
+[ ] api验签支持SM2算法
+[ ] examples增加CNN模型推理示例
+[ ] examples增加Keras模型权重转换示例
+[ ] examples增加PyTorch模型权重转换示例
