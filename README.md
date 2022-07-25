@@ -19,7 +19,7 @@
 
 1. [开发指南](doc/DEV.md)
 2. [API文档模板](doc/API.md)
-3. [本地测试](doc/TEST.md)
+3. [框架测试](doc/TEST.md)
 
 
 
