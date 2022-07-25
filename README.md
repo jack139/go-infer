@@ -24,7 +24,7 @@
 
 ## TODO List
 
-[ ] api验签支持SM2算法
-[ ] examples增加CNN模型推理示例
-[ ] examples增加Keras模型权重转换示例
-[ ] examples增加PyTorch模型权重转换示例
+- [ ] api验签支持SM2算法
+- [ ] examples增加CNN模型推理示例
+- [ ] examples增加Keras模型权重转换示例
+- [ ] examples增加PyTorch模型权重转换示例
