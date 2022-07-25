@@ -12,3 +12,10 @@
 ## 分布式部署架构
 
 <img src="doc/arch.png" alt="分部署架构" width="300" />
+
+
+
+## 开发文档
+
+[API 接口定义]: doc/API.md
+
