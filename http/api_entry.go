@@ -8,15 +8,15 @@ import (
 )
 
 
-/* 空接口, 只进行签名校验 */
+/* API 默认入口 */
 func apiEntry(ctx *fasthttp.RequestCtx) {
 	// POST 的数据
 	content := ctx.PostBody()
 
 	// 验签
-	data, err := helper.CheckSign(content)
+	data, err := checkSign(content)
 	if err != nil {
-		helper.RespError(ctx, 9000, err.Error())
+		respError(ctx, 9000, err.Error())
 		return
 	}
 
@@ -27,11 +27,11 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			if err!=nil {
 				if reqDataMap!=nil {
 					if code, ok := (*reqDataMap)["code"].(int); ok { // ApiEntry() 有带回错误代码
-						helper.RespError(ctx, code, err.Error()) 
+						respError(ctx, code, err.Error()) 
 						return
 					}
 				}
-				helper.RespError(ctx, 9001, err.Error()) 
+				respError(ctx, 9001, err.Error()) 
 				return
 			}
 
@@ -44,30 +44,30 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			// 发 请求消息
 			err = helper.Redis_publish_request(requestId, reqDataMap)
 			if err!=nil {
-				helper.RespError(ctx, 9002, err.Error())
+				respError(ctx, 9002, err.Error())
 				return
 			}
 
 			// 收 结果消息
 			respData, err := helper.Redis_sub_receive(pubsub)
 			if err!=nil {
-				helper.RespError(ctx, 9003, err.Error())
+				respError(ctx, 9003, err.Error())
 				return
 			}
 
 			// code==0 提交成功
 			if (*respData)["code"].(float64)!=0 { 
-				helper.RespError(ctx, int((*respData)["code"].(float64)), (*respData)["msg"].(string))
+				respError(ctx, int((*respData)["code"].(float64)), (*respData)["msg"].(string))
 				return
 			}
 
 			delete(*respData, "code")
 
-			helper.RespJson(ctx, respData) // 正常返回
+			respJson(ctx, respData) // 正常返回
 
 			return
 		}
 	}
 
-	helper.RespError(ctx, 9009, "unknow path") 
+	respError(ctx, 9009, "unknow path") 
 }

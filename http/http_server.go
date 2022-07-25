@@ -28,7 +28,7 @@ func RunServer() {
 
 	/* 启动server */
 	s := &fasthttp.Server{
-		Handler: helper.Combined(r.Handler),
+		Handler: combined(r.Handler),
 		Name: "FastHttpLogger",
 	}
 	log.Fatal(s.ListenAndServe(host))

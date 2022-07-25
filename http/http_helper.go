@@ -1,4 +1,4 @@
-package helper
+package http
 
 import (
 	"crypto/sha256"
@@ -13,6 +13,8 @@ import (
 
 	"github.com/valyala/fasthttp"
 	"github.com/ferluci/fast-realip"
+
+	"github.com/jack139/go-infer/helper"
 )
 
 var (
@@ -26,7 +28,7 @@ var (
 
 
 /* 处理返回值，返回json */
-func RespJson(ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
+func respJson(ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
 	(*data)["msg"] = "success"
 	respJson := map[string]interface{}{
 		"code": 0,
@@ -40,7 +42,7 @@ func RespJson(ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
 	doJSONWrite(ctx, fasthttp.StatusOK, respJson)
 }
 
-func RespError(ctx *fasthttp.RequestCtx, code int, msg string) {
+func respError(ctx *fasthttp.RequestCtx, code int, msg string) {
 	log.Println("Error: ", code, msg)
 	respJson := map[string]interface{}{
 		"code": code,
@@ -65,10 +67,11 @@ func doJSONWrite(ctx *fasthttp.RequestCtx, code int, obj interface{}) {
 	}
 }
 
+
 /*
 	接口验签，返回data数据
 */
-func CheckSign(content []byte) (*map[string]interface{}, error) {
+func checkSign(content []byte) (*map[string]interface{}, error) {
 	fields := make(map[string]interface{})
 	if err := json.Unmarshal(content, &fields); err != nil {
 		return nil, err
@@ -102,7 +105,7 @@ func CheckSign(content []byte) (*map[string]interface{}, error) {
 	}
 
 	// 获取 secret，用户密钥的签名串
-	secret, ok := Settings.Api.SECRET_KEY[appId]
+	secret, ok := helper.Settings.Api.SECRET_KEY[appId]
 	if !ok {
 		return nil, fmt.Errorf("wrong appId")
 	}
@@ -172,7 +175,7 @@ func getHttp(ctx *fasthttp.RequestCtx) string {
 // Combined format:
 // [<time>] <remote-addr> | <HTTP/http-version> | <method> <url> - <status> - <response-time us> | <user-agent>
 // [2017/05/31 - 13:27:28] 127.0.0.1:54082 | HTTP/1.1 | GET /hello - 200 - 48.279µs | Paw/3.1.1 (Macintosh; OS X/10.12.5) GCDHTTPRequest
-func Combined(req fasthttp.RequestHandler) fasthttp.RequestHandler {
+func combined(req fasthttp.RequestHandler) fasthttp.RequestHandler {
 	return fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 		begin := time.Now()
 		req(ctx)

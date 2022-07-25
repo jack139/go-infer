@@ -6,8 +6,7 @@ import (
 	"fmt"
 
 	"github.com/jack139/go-infer/types"
-	"github.com/jack139/go-infer/http"
-	"github.com/jack139/go-infer/server"
+	"github.com/jack139/go-infer/cli"
 )
 
 /*  定义模型相关参数和方法  */
@@ -58,7 +57,8 @@ func TestHttp(t *testing.T) {
 
 	types.ModelList = append(types.ModelList, &EchoModel{})
 
-	http.RunServer()
+	// 启动 http
+	cli.HttpCmd.RunE(nil, nil)
 }
 
 
@@ -68,5 +68,5 @@ func TestServer(t *testing.T) {
 	types.ModelList = append(types.ModelList, &EchoModel{})
 
 	// 启动 分发服务
-	server.RunServer("0")
+	cli.ServerCmd.RunE(nil, []string{"0"})
 }
