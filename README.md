@@ -17,5 +17,5 @@
 
 ## 开发文档
 
-[API 接口定义]: doc/API.md
+[API 接口定义](doc/API.md)
 
