@@ -36,6 +36,12 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 				return
 			}
 
+			// 构建队列请求参数
+			reqQueueDataMap := map[string]interface{}{
+				"api": types.ModelList[mIndex].ApiPath(),
+				"params": *reqDataMap,
+			}
+
 			requestId := generateRequestId()
 
 			// 注册消息队列，在发redis消息前注册, 防止消息漏掉
@@ -43,7 +49,7 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			defer pubsub.Close()
 
 			// 发 请求消息
-			err = helper.Redis_publish_request(requestId, reqDataMap)
+			err = helper.Redis_publish_request(requestId, &reqQueueDataMap)
 			if err!=nil {
 				respError(ctx, 9002, err.Error())
 				return

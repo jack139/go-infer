@@ -60,10 +60,7 @@ func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interfa
 
 	// 构建请求参数
 	reqDataMap := map[string]interface{}{
-		"api": x.ApiPath(),
-		"params": map[string]interface{}{
-			"text": text,
-		},
+		"text": text,
 	}
 
 	return &reqDataMap, nil

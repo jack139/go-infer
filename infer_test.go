@@ -3,7 +3,6 @@ package infer
 import (
 	"testing"
 	"log"
-	"fmt"
 
 	"github.com/jack139/go-infer/types"
 	"github.com/jack139/go-infer/cli"
@@ -24,30 +23,18 @@ func (x *EchoModel) Init() error {
 func (x *EchoModel) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Model ApiEntry()", x.ApiPath())
 
-	// 构建请求参数
-	reqDataMap := map[string]interface{}{
-		"api": x.ApiPath(),
-		"params": map[string]interface{}{
-			"data": *reqData,
-		},
-	}
+	log.Println("request data: ", *reqData)
 
-	log.Println("request data: ", reqDataMap)
-
-	return &reqDataMap, nil
+	return reqData, nil
 	//return &map[string]interface{}{"code":9999}, fmt.Errorf("parameters error test") // 错误返回： 错误代码，错误信息
 }
 
 func (x *EchoModel) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Model Infer()", x.ApiPath())
-	retData, ok := (*reqData)["data"].(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("retrieve response data fail") // 错误返回： 错误代码，错误信息	
-	}
 
-	log.Println("infer return data: ", retData)
+	log.Println("infer return data: ", reqData)
 
-	return &retData, nil
+	return reqData, nil
 	//return &map[string]interface{}{"code":9998}, fmt.Errorf("infer error test") // 错误返回： 错误代码，错误信息
 }
 
