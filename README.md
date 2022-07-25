@@ -9,6 +9,6 @@
 
 
 
-分布式部署架构如图：
+## 分布式部署架构
 
-<img src="doc/arch.png" alt="分部署架构" style="zoom:40%;" />
+<img src="doc/arch.png" alt="分部署架构" width="300" />
