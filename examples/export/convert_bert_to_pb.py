@@ -9,8 +9,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 # ------- bert_google base
 from bert_modeling import BertModel, BertConfig
-config_json_path = '../../../../nlp/nlp_model/bert_uncased_L-12_H-768_A-12/bert_config.json'
-checkpoint_path = '../../../../nlp/nlp_model/bert_uncased_L-12_H-768_A-12/bert_model.ckpt'
+config_json_path = '../../../../nlp/nlp_model/chinese_bert_L-12_H-768_A-12/bert_config.json'
+checkpoint_path = '../../../../nlp/nlp_model/chinese_bert_L-12_H-768_A-12/bert_model.ckpt'
 
 max_seq_length = 512
 bert_config = BertConfig.from_json_file(config_json_path)
