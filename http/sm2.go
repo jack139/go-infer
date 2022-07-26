@@ -27,7 +27,7 @@ func initSM2(){
 	// 公钥
 	pubKey = &privKey.PublicKey
 
-	log.Printf("X: %x Y: %x\n", pubKey.X, pubKey.Y)
+	log.Printf("D: %x\nX: %x\nY: %x\n", privKey.D, pubKey.X, pubKey.Y)
 }
 
 // 从 base64私钥 恢复密钥对
