@@ -130,11 +130,6 @@ func checkSign(content []byte) (*map[string]interface{}, error) {
 		return &map[string]interface{}{"code":9806}, fmt.Errorf("wrong version")
 	}
 
-	// 检查签名类型
-	if signType != "SHA256" {
-		return &map[string]interface{}{"code":9803}, fmt.Errorf("unknown signType")
-	}
-
 	// 生成参数的key，并排序
 	keys := getMapKeys(fields)
 	sort.Strings(*keys)
@@ -160,17 +155,29 @@ func checkSign(content []byte) (*map[string]interface{}, error) {
 	signString += "key=" + secret
 	//fmt.Println(signString)
 
-	h := sha256.New()
-	h.Write([]byte(signString))
-	sum := h.Sum(nil)
-	sha256Str := fmt.Sprintf("%x", sum)
-	signStr := base64.StdEncoding.EncodeToString([]byte(sha256Str))
-	//fmt.Println(sha256Str)
+	// 验签
+	log.Println("signature type: ", signType)
+	switch signType {
+	case "SHA256":
+		h := sha256.New()
+		h.Write([]byte(signString))
+		sum := h.Sum(nil)
+		sha256Str := fmt.Sprintf("%x", sum)
+		signStr := base64.StdEncoding.EncodeToString([]byte(sha256Str))
+		//fmt.Println(sha256Str)
 
-	if signStr != signData {
-		fmt.Println(signStr)
-		fmt.Println(signData)
-		return &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+		if signStr != signData {
+			fmt.Println(signStr)
+			fmt.Println(signData)
+			return &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+		}
+	case "SM2":
+		ok := sm2VerifyBase64([]byte(signString), signData)
+		if ok != true {
+			return &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+		}
+	default:
+		return &map[string]interface{}{"code":9803}, fmt.Errorf("unknown signType")
 	}
 
 	return &data, nil

@@ -25,7 +25,7 @@
 
 ## TODO
 
-- [ ] api验签支持SM2算法
+- [x] api验签支持SM2算法
 - [x] BERT模型推理示例
 - [ ] CNN模型推理示例
 - [x] Tensorflow模型权重转换示例

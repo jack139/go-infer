@@ -9,7 +9,7 @@
 | --------- | ------ | ----------------------------- | ----------- |
 | appId     | string | 应用渠道编号                  |             |
 | version   | string | 版本号                        |             |
-| signType  | string | 签名算法，后续会支持国密SM2算法 | SHA256 |
+| signType  | string | 签名算法，国密SM2或SHA256 | SM2或SHA256 |
 | signData  | string | 签名数据，具体算法见下文      |             |
 | encType   | string | 接口数据加密算法，目前不加密  | plain       |
 | timestamp | int    | unix时间戳（秒）              |             |
@@ -23,7 +23,7 @@
 >
 > ```key1=value1&key2=value2&...&key=appSecret```，key=appSecret固定拼接在参数串末尾，appSecret需替换成应用渠道所分配的appSecret。
 >
-> 4. 签名，使用指定的算法进行加签获取二进制字节，使用 16进制进行编码得到签名字符串，然后base64编码。
+> 4. 签名，使用指定的算法进行加签获取二进制字节，使用16进制进行编码得到签名字符串，然后base64编码。
 > 5. 验签，对收到的参数按1-4步骤签名，比对得到的签名串与提交的签名串是否一致。
 
 签名示例：
@@ -33,7 +33,7 @@
 {
     "appId":"3EA25569454745D01219080B779F021F",
     "version": "1",
-    "signType": "SHA256",
+    "signType": "SM2",
     "signData": "...",
     "encType": "plain",
     "timestamp":1658716494,
@@ -45,6 +45,7 @@
 
 密钥：
 appSecret="41DF0E6AE27B5282C07EF5124642A352"
+SM2_privateKey="JShsBOJL0RgPAoPttEB1hgtPAvCikOl0V1oTOYL7k5U="
 
 待加签串：
 appId=3EA25569454745D01219080B779F021F&data={"image":"","text":"测试测试"}&encType=plain&signType=SHA256&timestamp=1658716494&version=1&key=41DF0E6AE27B5282C07EF5124642A352
@@ -55,6 +56,8 @@ SHA256加签结果：
 base64后结果：
 "YTY4YzFiODUyYTY1MDMxNGFmYWFkNjg0ZjM2NTJjMzM2YzliOTY5ZTk0MzgyNWEyOTM4MGI1MTZkZTc0NmVjZQ=="
 
+SM2加签结果（每次不同）：
+"ILSOY5A0/sfW5Y9T6rIjl1AEPlDtQeqtwAxLibNbnajlj2fY/DxvTuSok+sqxy2St4pvvs4/rdaNOCNpwBuJ6A=="
 ```
 
 返回结果

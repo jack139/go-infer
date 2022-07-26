@@ -3,6 +3,7 @@
 API:
     Port: 5000
     Addr: 0.0.0.0
+    SM2PrivateKey: "JShsBOJL0RgPAoPttEB1hgtPAvCikOl0V1oTOYL7k5U=" # SM2私钥
     AppIdSecret: { # 接口调用分配的 appid 和 sevret
         "3EA25569454745D01219080B779F021F" : "41DF0E6AE27B5282C07EF5124642A352",
     }

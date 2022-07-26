@@ -7,6 +7,7 @@ require (
 	github.com/ferluci/fast-realip v1.0.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/spf13/cobra v1.5.0
+	github.com/tjfoc/gmsm v1.4.1
 	github.com/valyala/fasthttp v1.38.0
 	gopkg.in/yaml.v3 v3.0.1
 )

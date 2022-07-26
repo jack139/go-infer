@@ -16,6 +16,9 @@ import (
 // start a HTTP service of API
 func RunServer() {
 
+	// 初始化SM2的密钥
+	initSM2()
+
 	/* router */
 	r := router.New()
 	r.GET("/", index)

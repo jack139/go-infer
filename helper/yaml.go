@@ -14,6 +14,7 @@ type apiYaml struct {
 
 	/* 接口验签使用 appid : appsecret */
 	SECRET_KEY map[string]string `yaml:"AppIdSecret"` 
+	SM2Private string `yaml:"SM2PrivateKey"`
 }
 
 type serverYaml struct {

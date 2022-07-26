@@ -2,7 +2,7 @@
 
 import sys, urllib3, json, base64, time, hashlib
 from datetime import datetime
-#from async_api.utils import sm2
+from utils import sm2
 
 urllib3.disable_warnings()
 
@@ -28,8 +28,8 @@ if __name__ == '__main__':
 
     body = {
         'version'  : '1',
-        'signType' : 'SHA256', 
-        #'signType' : 'SM2',
+        #'signType' : 'SHA256', 
+        'signType' : 'SM2',
         'encType'  : 'plain',
         'data'     : {
             #'image'    : base64.b64encode(img_data).decode('utf-8'),
@@ -50,13 +50,12 @@ if __name__ == '__main__':
     if body['signType'] == 'SHA256':
         signature_str =  base64.b64encode(hashlib.sha256(sign_str.encode('utf-8')).hexdigest().encode('utf-8')).decode('utf-8')
     else: # SM2
-        #signature_str = sm2.SM2withSM3_sign_base64(sign_str)
-        pass
+        signature_str = sm2.SM2withSM3_sign_base64(sign_str)
 
     body['signData'] = signature_str
 
     body = json.dumps(body)
-    #print(body)
+    print(body)
 
     pool = urllib3.PoolManager(num_pools=2, timeout=180, retries=False)
 
