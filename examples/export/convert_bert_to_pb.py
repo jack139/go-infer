@@ -3,7 +3,6 @@
 import tensorflow as tf
 import os, shutil
 import utils
-from tensorflow.python.framework import graph_util
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
