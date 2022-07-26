@@ -55,7 +55,7 @@ if __name__ == '__main__':
     body['signData'] = signature_str
 
     body = json.dumps(body)
-    print(body)
+    #print(body)
 
     pool = urllib3.PoolManager(num_pools=2, timeout=180, retries=False)
 
