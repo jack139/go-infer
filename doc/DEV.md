@@ -64,11 +64,13 @@ rootCmd.AddCommand(cli.ServerCmd)
 
 #### (1) Tensorflow权重导出
 
-可参考[convert_bert_to_pb.py](../examples/export/convert_bert_to_pb.py)
+可参考[export_tf_bert.py](../examples/export/export_tf_bert.py)
 
 
 
-#### (2) Keras权重导出（todo）
+#### (2) Keras权重导出
+
+可参考[export_keras_cnn.py](../examples/export/export_keras_cnn.py)
 
 
 
@@ -79,6 +81,37 @@ rootCmd.AddCommand(cli.ServerCmd)
 ### 7. 系统部署
 
 #### (1) 本地测试
+
+编译
+
+```bash
+cd examples
+make	
+```
+
+
+
+启动Dispatch分发和推理服务
+
+```bash
+build/go-embedding server 0
+```
+
+
+
+启动Http API服务
+
+```bash
+build/go-embedding http
+```
+
+
+
+API测试
+
+```bash
+python3 test_api localhost mobile
+```
 
 
 

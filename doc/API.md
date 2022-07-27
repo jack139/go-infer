@@ -103,7 +103,7 @@ SM2加签结果（每次不同）：
 
 
 
-### 2. example实现的api
+### 2. example中获取文本特征
 
 > 获取文本embeddings
 >
@@ -148,12 +148,76 @@ SM2加签结果（每次不同）：
     "appId": "", 
     "code": 0, 
     "data": {
-        "embeddings": [0.21856225, 0.22315553, ..., -0.5392351, -0.14255117], 
+        "embeddings": [
+            0.21856225, 0.22315553, 
+            ...
+            , -0.5392351, -0.14255117
+        ], 
         "msg": "success"
     }, 
     "encType": "plain", 
     "signType": "plain", 
     "success": true, 
     "timestamp": 1658716495
+}
+```
+
+### 3. example中获取图片特征
+
+> 使用Mobilenet获取图片embeddings
+>
+> 注意：
+>
+> 1. 只是演示，不保证结果准确
+> 2. 模型权重导出自Keras官方权重，具体见export目录
+
+请求URL
+
+> http://127.0.0.1:5000/api/mobile
+
+请求方式
+
+> POST
+
+输入参数
+
+| 参数  | 必选 | 类型   | 说明               |
+| ----- | ---- | ------ | ------------------ |
+| image | 是   | string | base64编码图片数据 |
+> 图片尺寸 224\*224
+
+请求示例
+
+```json
+{
+    "image" : "..."
+}
+```
+
+返回结果
+
+| 参数       | 必选 | 类型   | 说明                 |
+| ---------- | ---- | ------ | -------------------- |
+| embeddings     | 是   | float数组 | 输入图片的embeddings |
+
+
+返回示例
+
+```json
+{
+    "appId": "", 
+    "code": 0, 
+    "data": {
+        "embeddings": [[[
+            1.802082e-11, 2.1090724e-10, 
+            ..., 
+            1.6219401e-10, 1.038099e-10
+        ]]], 
+        "msg": "success"
+    }, 
+    "encType": "plain", 
+    "signType": "plain", 
+    "success": true, 
+    "timestamp": 1658900086
 }
 ```
