@@ -70,10 +70,10 @@ SM2加签结果（每次不同）：
 | encType   | string  | 接口数据加密算法，目前不加密                                 | plain |
 | success   | boolean | 成功与否                                                     |       |
 | timestamp | int     | unix时间戳                                                   |       |
+| requestId | string  | 当次请求的标识id                                              |       |
 | data      | json    | 成功时返回结果数据；出错时，data.msg返回错误说明。详见具体接口 |       |
 
-> 成功时：code为0， success为True，data内容见各接口定义；
->
+> 成功时：code为0， success为true，data内容见各接口定义；
 > 出错时：code返回错误代码，具体定义见各接口说明
 
 返回示例
@@ -89,7 +89,8 @@ SM2加签结果（每次不同）：
     "data": {
        "msg": "success", 
        ...
-    }
+    },
+    "requestId": "20220727e5b9bbfe0e33c01e3c8ccb9c7382d512"
 }
 ```
 
@@ -158,7 +159,8 @@ SM2加签结果（每次不同）：
     "encType": "plain", 
     "signType": "plain", 
     "success": true, 
-    "timestamp": 1658716495
+    "timestamp": 1658716495,
+    "requestId": "2022072792c2e34ae170db21066849f015dd3133"
 }
 ```
 
@@ -218,6 +220,7 @@ SM2加签结果（每次不同）：
     "encType": "plain", 
     "signType": "plain", 
     "success": true, 
-    "timestamp": 1658900086
+    "timestamp": 1658900086,
+    "requestId": "20220727b796f2356b94bcbd47679b2606a8b117"
 }
 ```

@@ -38,11 +38,12 @@ func init(){
 }
 
 /* 处理返回值，返回json */
-func respJson(ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
+func respJson(appId, reqId string, ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
 	(*data)["msg"] = "success"
 	respJson := map[string]interface{}{
 		"code": 0,
-		"appId": "",
+		"appId": appId,
+		"requestId": reqId,
 		"signType": "plain",
 		"encType": "plain",
 		"success": true,
@@ -52,11 +53,12 @@ func respJson(ctx *fasthttp.RequestCtx, data *map[string]interface{}) {
 	doJSONWrite(ctx, fasthttp.StatusOK, respJson)
 }
 
-func respError(ctx *fasthttp.RequestCtx, code int, msg string) {
+func respError(appId, reqId string, ctx *fasthttp.RequestCtx, code int, msg string) {
 	log.Println("Error: ", code, msg)
 	respJson := map[string]interface{}{
 		"code": code,
-		"appId": "",
+		"appId": appId,
+		"requestId": reqId,
 		"signType": "plain",
 		"encType": "plain",
 		"success": false,
@@ -81,10 +83,10 @@ func doJSONWrite(ctx *fasthttp.RequestCtx, code int, obj interface{}) {
 /*
 	接口验签，返回data数据
 */
-func checkSign(content []byte) (*map[string]interface{}, error) {
+func checkSign(content []byte) (string, *map[string]interface{}, error) {
 	fields := make(map[string]interface{})
 	if err := json.Unmarshal(content, &fields); err != nil {
-		return &map[string]interface{}{"code":9801}, err
+		return "", &map[string]interface{}{"code":9801}, err
 	}
 
 	var appId, version, signType, signData string
@@ -94,40 +96,40 @@ func checkSign(content []byte) (*map[string]interface{}, error) {
 
 	// 检查参数
 	if appId, ok = fields["appId"].(string); !ok {
-		return &map[string]interface{}{"code":9801}, fmt.Errorf("need appid")
+		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need appid")
 	}
 	if version, ok = fields["version"].(string); !ok {
-		return &map[string]interface{}{"code":9801}, fmt.Errorf("need version")
+		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need version")
 	}
 	if signType, ok = fields["signType"].(string); !ok {
-		return &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_type")
+		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_type")
 	}
 	if signData, ok = fields["signData"].(string); !ok {
-		return &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_data")
+		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_data")
 	}
 	if _, ok = fields["timestamp"].(float64); !ok {
-		return &map[string]interface{}{"code":9801}, fmt.Errorf("need timestamp")
+		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need timestamp")
 	} else {
 		timestamp = int64(fields["timestamp"].(float64)) // 返回整数
 	}
 	if data, ok = fields["data"].(map[string]interface{}); !ok {
-		return &map[string]interface{}{"code":9801}, fmt.Errorf("need data")
+		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need data")
 	}
 
 	// 调用时间不能超过前后5分钟
 	if math.Abs(float64(time.Now().Unix()-timestamp))>300 {
-		return &map[string]interface{}{"code":9802}, fmt.Errorf("wrong timestamp")
+		return "", &map[string]interface{}{"code":9802}, fmt.Errorf("wrong timestamp")
 	}
 
 	// 获取 secret，用户密钥的签名串
 	secret, ok := helper.Settings.Api.SECRET_KEY[appId]
 	if !ok {
-		return &map[string]interface{}{"code":9805}, fmt.Errorf("wrong appId")
+		return "", &map[string]interface{}{"code":9805}, fmt.Errorf("wrong appId")
 	}
 
 	// 检查版本
 	if version != "1" {
-		return &map[string]interface{}{"code":9806}, fmt.Errorf("wrong version")
+		return "", &map[string]interface{}{"code":9806}, fmt.Errorf("wrong version")
 	}
 
 	// 生成参数的key，并排序
@@ -169,18 +171,18 @@ func checkSign(content []byte) (*map[string]interface{}, error) {
 		if signStr != signData {
 			fmt.Println(signStr)
 			fmt.Println(signData)
-			return &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+			return "", &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
 		}
 	case "SM2":
 		ok := sm2VerifyBase64([]byte(signString), signData)
 		if ok != true {
-			return &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+			return "", &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
 		}
 	default:
-		return &map[string]interface{}{"code":9803}, fmt.Errorf("unknown signType")
+		return "", &map[string]interface{}{"code":9803}, fmt.Errorf("unknown signType")
 	}
 
-	return &data, nil
+	return appId, &data, nil
 }
 
 

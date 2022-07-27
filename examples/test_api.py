@@ -32,10 +32,13 @@ if __name__ == '__main__':
         'signType' : 'SM2',
         'encType'  : 'plain',
         'data'     : {
-            'image'    : base64.b64encode(img_data).decode('utf-8'),
+            'image'    : "",
             'text'     : "测试测试",
         }
     }
+
+    if api_path=="mobile":
+        body['data']['image'] = base64.b64encode(img_data).decode('utf-8'),
 
     appid = '3EA25569454745D01219080B779F021F'
     unixtime = int(time.time())
