@@ -23,8 +23,8 @@ if __name__ == '__main__':
     hostname = sys.argv[1]
     api_path = sys.argv[2]
 
-    #with open(filepath, 'rb') as f:
-    #    img_data = f.read()
+    with open("test.jpg", 'rb') as f:
+        img_data = f.read()
 
     body = {
         'version'  : '1',
@@ -32,7 +32,7 @@ if __name__ == '__main__':
         'signType' : 'SM2',
         'encType'  : 'plain',
         'data'     : {
-            #'image'    : base64.b64encode(img_data).decode('utf-8'),
+            'image'    : base64.b64encode(img_data).decode('utf-8'),
             'text'     : "测试测试",
         }
     }

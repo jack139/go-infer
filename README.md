@@ -28,7 +28,7 @@
 
 - [x] api验签支持SM2算法
 - [x] BERT模型推理示例
-- [ ] CNN模型推理示例
+- [x] CNN模型推理示例
 - [x] Tensorflow模型权重转换示例
 - [x] Keras模型权重转换示例
 - [ ] PyTorch模型权重转换示例

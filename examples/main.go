@@ -9,6 +9,7 @@ import (
 	"github.com/jack139/go-infer/types"
 
 	"examples/models/embedding"
+	"examples/models/mobilenet"
 )
 
 
@@ -22,6 +23,7 @@ var (
 func init() {
 	// 添加模型实例
 	types.ModelList = append(types.ModelList, &embedding.BertEMB{})
+	types.ModelList = append(types.ModelList, &mobilenet.Mobilenet{})
 
 	// 命令行设置
 	rootCmd.CompletionOptions.DisableDefaultCmd = true

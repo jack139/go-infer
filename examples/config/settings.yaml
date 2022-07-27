@@ -22,4 +22,6 @@ Customer: { # 以下 key-value 为用户自定义使用
     # 预训练模型路径 
     "BertModelPath" : "export/outputs/saved-model",
     "BertVocabPath" : "export/outputs/vocab.txt",
+
+    "MobilenetModelPath" : "export/outputs/saved-model_keras",
 }
