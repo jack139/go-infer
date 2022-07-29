@@ -57,11 +57,9 @@ func (x *Mobilenet) ApiEntry(reqData *map[string]interface{}) (*map[string]inter
 }
 
 
-// Bert 推理
+// Mobilenet 推理
 func (x *Mobilenet) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Infer_Mobilenet")
-
-	const MaxSeqLength = 512
 
 	imageBase64 := (*reqData)["image"].(string)
 
