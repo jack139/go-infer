@@ -35,7 +35,7 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 						return
 					}
 				}
-				respError(appId, requestId, ctx, 9001, err.Error()) 
+				respError(appId, requestId, ctx, 9701, err.Error()) 
 				return
 			}
 
@@ -53,14 +53,14 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			// 发 请求消息
 			err = helper.Redis_publish_request(requestId, &reqQueueDataMap)
 			if err!=nil {
-				respError(appId, requestId, ctx, 9002, err.Error())
+				respError(appId, requestId, ctx, 9702, err.Error())
 				return
 			}
 
 			// 收 结果消息
 			respData, err := helper.Redis_sub_receive(pubsub)
 			if err!=nil {
-				respError(appId, requestId, ctx, 9003, err.Error())
+				respError(appId, requestId, ctx, 9703, err.Error())
 				return
 			}
 
@@ -79,5 +79,5 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 		}
 	}
 
-	respError(appId, "", ctx, 9009, "unknow path") 
+	respError(appId, "", ctx, 9709, "unknow path") 
 }

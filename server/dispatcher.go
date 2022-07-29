@@ -130,7 +130,7 @@ func porcessApi(payload string) (string, string, error) {
 			}
 			ret, err := types.ModelList[m].Infer(&params)
 			if err!=nil {
-				retJson["code"] = 9101 // 默认返回错误代码
+				retJson["code"] = 9998 // 默认返回错误代码
 				retJson["msg"] = err.Error()
 				if ret!=nil {
 					if code, ok := (*ret)["code"].(int); ok { // infer() 有带回错误代码
@@ -150,7 +150,7 @@ func porcessApi(payload string) (string, string, error) {
 	if retJson["code"] == -1 {
 		log.Println("faceSearch() unknown api:", data["api"])
 		result = []byte("{\"code\":-2}")
-		retJson["code"] = 9109
+		retJson["code"] = 9900
 		retJson["msg"] = "unknown api"		
 	}
 
