@@ -1,18 +1,20 @@
+// Package to provide base Model interface definition
 package types
 
-// 处理函数入口类型
-type funcType func(*map[string]interface{}) (*map[string]interface{}, error)
-
-// 模型接口定义
+// base Model interface definition
 type Model interface {
+	// 返回 api 的 http路径
 	ApiPath() (string)
-	ApiEntry(*map[string]interface{}) (*map[string]interface{}, error)  // 处理 api 参数的过程
+	// 处理 api 参数的过程
+	ApiEntry(*map[string]interface{}) (*map[string]interface{}, error)
 
-	Init() (error)  // 模型初始化，装入权重等
-	Infer(*map[string]interface{}) (*map[string]interface{}, error)  // 模型推理的过程
+	// 模型初始化，装入权重等
+	Init() (error)
+	// 模型推理的过程
+	Infer(*map[string]interface{}) (*map[string]interface{}, error)
 }
 
 var (
-	// 模型列表
+	// Models list which been used in API call and inference
 	ModelList []Model
 )
