@@ -31,11 +31,16 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			if err!=nil {
 				if reqDataMap!=nil {
 					if code, ok := (*reqDataMap)["code"].(int); ok { // ApiEntry() 有带回错误代码
-						respError(appId, requestId, ctx, code, err.Error()) 
+						respError(appId, requestId, ctx, code,
+							helper.Settings.ErrCode.APIENTRY_FAIL["msg"].(string) + " : " + err.Error(),
+						)
 						return
 					}
 				}
-				respError(appId, requestId, ctx, 9701, err.Error()) 
+				respError(appId, requestId, ctx,
+					helper.Settings.ErrCode.APIENTRY_FAIL["code"].(int),
+					helper.Settings.ErrCode.APIENTRY_FAIL["msg"].(string) + " : " + err.Error(),
+				)
 				return
 			}
 
@@ -53,14 +58,20 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			// 发 请求消息
 			err = helper.Redis_publish_request(requestId, &reqQueueDataMap)
 			if err!=nil {
-				respError(appId, requestId, ctx, 9702, err.Error())
+				respError(appId, requestId, ctx,
+					helper.Settings.ErrCode.SENDMSG_FAIL["code"].(int),
+					helper.Settings.ErrCode.SENDMSG_FAIL["msg"].(string) + " : " + err.Error(),
+				)
 				return
 			}
 
 			// 收 结果消息
 			respData, err := helper.Redis_sub_receive(pubsub)
 			if err!=nil {
-				respError(appId, requestId, ctx, 9703, err.Error())
+				respError(appId, requestId, ctx,
+					helper.Settings.ErrCode.RECVMSG_FAIL["code"].(int),
+					helper.Settings.ErrCode.RECVMSG_FAIL["msg"].(string) + " : " + err.Error(),
+				)
 				return
 			}
 
@@ -79,5 +90,8 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 		}
 	}
 
-	respError(appId, "", ctx, 9709, "unknow path") 
+	respError(appId, "", ctx,
+		helper.Settings.ErrCode.UNKOWN_APIPATH["code"].(int),
+		helper.Settings.ErrCode.UNKOWN_APIPATH["msg"].(string),
+	)
 }

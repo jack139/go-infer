@@ -17,6 +17,22 @@ Server:
     MessageTimeout: 10 # 推理计算最大等待时间
     MaxWorkers: 8 # 模型推理最大并发数
 
+ErrCode:
+    QueueTimeout: { "code": 9997, "msg": "消息队列超时" }
+    UnknownApi: { "code": 9900, "msg": "未知的API" }
+    InferFail: { "code": 9998, "msg": "模型推理失败" }
+    ApiEntryFail: { "code": 9701, "msg": "API参数处理失败" }
+    SendMsgFail: { "code": 9702, "msg": "发送队列消息失败" }
+    RecvMsgFail: { "code": 9703, "msg": "接收队列消息失败" }
+    UnknownApiPath: { "code": 9709, "msg": "未知的API路径" }
+
+    SignFail: { "code": 9800, "msg": "验签失败" }
+    SignFail1: { "code": 9801, "msg": "缺少参数" }
+    SignFail2: { "code": 9802, "msg": "时间戳错误" }
+    SignFail3: { "code": 9803, "msg": "签名算法错误" }
+    SignFail5: { "code": 9805, "msg": "AppId错误" }
+    SignFail6: { "code": 9806, "msg": "版本号错误" }
+
 # 自定义参数
 Customer: { # 以下 key-value 为用户自定义使用
     # 预训练模型路径 

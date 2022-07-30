@@ -96,40 +96,49 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 
 	// 检查参数
 	if appId, ok = fields["appId"].(string); !ok {
-		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need appid")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "appid")
 	}
 	if version, ok = fields["version"].(string); !ok {
-		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need version")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "version")
 	}
 	if signType, ok = fields["signType"].(string); !ok {
-		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_type")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "sign_type")
 	}
 	if signData, ok = fields["signData"].(string); !ok {
-		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need sign_data")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "sign_data")
 	}
 	if _, ok = fields["timestamp"].(float64); !ok {
-		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need timestamp")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "timestamp")
 	} else {
 		timestamp = int64(fields["timestamp"].(float64)) // 返回整数
 	}
 	if data, ok = fields["data"].(map[string]interface{}); !ok {
-		return "", &map[string]interface{}{"code":9801}, fmt.Errorf("need data")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "data")
 	}
 
 	// 调用时间不能超过前后5分钟
 	if math.Abs(float64(time.Now().Unix()-timestamp))>300 {
-		return "", &map[string]interface{}{"code":9802}, fmt.Errorf("wrong timestamp")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL2["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL2["msg"].(string))
 	}
 
 	// 获取 secret，用户密钥的签名串
 	secret, ok := helper.Settings.Api.SECRET_KEY[appId]
 	if !ok {
-		return "", &map[string]interface{}{"code":9805}, fmt.Errorf("wrong appId")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL5["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL5["msg"].(string))
 	}
 
 	// 检查版本
 	if version != "1" {
-		return "", &map[string]interface{}{"code":9806}, fmt.Errorf("wrong version")
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL6["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL6["msg"].(string))
 	}
 
 	// 生成参数的key，并排序
@@ -169,17 +178,19 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 		//fmt.Println(sha256Str)
 
 		if signStr != signData {
-			fmt.Println(signStr)
-			fmt.Println(signData)
-			return "", &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+			log.Println(signStr, signData)
+			return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL["code"].(int)},
+				fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL["msg"].(string))
 		}
 	case "SM2":
 		ok := sm2VerifyBase64([]byte(signString), signData)
 		if ok != true {
-			return "", &map[string]interface{}{"code":9800}, fmt.Errorf("wrong signature")
+			return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL["code"].(int)},
+				fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL["msg"].(string))
 		}
-	default:
-		return "", &map[string]interface{}{"code":9803}, fmt.Errorf("unknown signType")
+	default: // 未知签名算法
+		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL3["code"].(int)},
+			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL3["msg"].(string))
 	}
 
 	return appId, &data, nil

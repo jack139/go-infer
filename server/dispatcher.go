@@ -128,18 +128,16 @@ func porcessApi(payload string) (string, string, error) {
 			if !ok {
 				return requestId, "", fmt.Errorf("need params")
 			}
-			ret, err := types.ModelList[m].Infer(&params)
+			ret, err := types.ModelList[m].Infer(&params) // 模型推理
 			if err!=nil {
-				retJson["code"] = 9998 // 默认返回错误代码
-				retJson["msg"] = err.Error()
+				retJson["code"] = helper.Settings.ErrCode.INFER_FAIL["code"].(int)
+				retJson["msg"] = helper.Settings.ErrCode.INFER_FAIL["msg"].(string) + " : " + err.Error()
 				if ret!=nil {
 					if code, ok := (*ret)["code"].(int); ok { // infer() 有带回错误代码
 						retJson["code"] = code
 					}
 				}
 			} else {
-				//retJson["code"] = 0
-				//retJson["data"] = *ret
 				retJson = *ret
 				retJson["code"] = 0
 			}
@@ -147,11 +145,11 @@ func porcessApi(payload string) (string, string, error) {
 		}
 	} 
 
-	if retJson["code"] == -1 {
+	if retJson["code"] == -1 {  // 未知的 API path
 		log.Println("faceSearch() unknown api:", data["api"])
 		result = []byte("{\"code\":-2}")
-		retJson["code"] = 9900
-		retJson["msg"] = "unknown api"		
+		retJson["code"] = helper.Settings.ErrCode.UNKOWN_API["code"].(int)
+		retJson["msg"] = helper.Settings.ErrCode.UNKOWN_API["msg"].(string)
 	}
 
 	result, err := json.Marshal(retJson)

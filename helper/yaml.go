@@ -26,9 +26,27 @@ type serverYaml struct {
 	MAX_WORKERS int `yaml:"MaxWorkers"`  // 最大线程数
 }
 
+type errCode struct {
+	QUEUE_TIMEOUT map[string]interface{} `yaml:"QueueTimeout"`
+	UNKOWN_API map[string]interface{} `yaml:"UnknownApi"`
+	INFER_FAIL map[string]interface{} `yaml:"InferFail"`
+	APIENTRY_FAIL map[string]interface{} `yaml:"ApiEntryFail"`
+	SENDMSG_FAIL map[string]interface{} `yaml:"SendMsgFail"`
+	RECVMSG_FAIL map[string]interface{} `yaml:"RecvMsgFail"`
+	UNKOWN_APIPATH map[string]interface{} `yaml:"UnknownApiPath"`
+
+	SIGN_FAIL map[string]interface{} `yaml:"SignFail"`
+	SIGN_FAIL1 map[string]interface{} `yaml:"SignFail1"`
+	SIGN_FAIL2 map[string]interface{} `yaml:"SignFail2"`
+	SIGN_FAIL3 map[string]interface{} `yaml:"SignFail3"`
+	SIGN_FAIL5 map[string]interface{} `yaml:"SignFail5"`
+	SIGN_FAIL6 map[string]interface{} `yaml:"SignFail6"`
+}
+
 type configYaml struct{
 	Api apiYaml `yaml:"API"`
 	Redis serverYaml `yaml:"Server"`
+	ErrCode errCode `yaml:"ErrCode"`
 	Customer map[string]string `yaml:"Customer"` 
 }
 

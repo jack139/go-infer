@@ -3,6 +3,7 @@ package infer
 import (
 	"testing"
 	"log"
+	"time"
 
 	"github.com/jack139/go-infer/types"
 	"github.com/jack139/go-infer/cli"
@@ -33,6 +34,8 @@ func (x *EchoModel) Infer(reqData *map[string]interface{}) (*map[string]interfac
 	log.Println("Model Infer()", x.ApiPath())
 
 	log.Println("infer return data: ", reqData)
+
+	time.Sleep(1 * time.Second) // 延时，模拟推理业务
 
 	return reqData, nil
 	//return &map[string]interface{}{"code":9998}, fmt.Errorf("infer error test") // 错误返回： 错误代码，错误信息

@@ -94,7 +94,8 @@ func Redis_sub_receive(pubsub *redis.PubSub) (*map[string]interface{}, error) {
 
 		// 检查超时
 		if time.Now().Unix() - startTime > Settings.Redis.MESSAGE_TIMEOUT {
-			retBytes = []byte("{\"code\":9997,\"msg\":\"消息队列超时\"}")
+			retBytes = []byte("{\"code\":" + strconv.Itoa(Settings.ErrCode.QUEUE_TIMEOUT["code"].(int)) +
+				",\"msg\":\"" + Settings.ErrCode.QUEUE_TIMEOUT["msg"].(string) + "\"}")
 			break
 		}
 
