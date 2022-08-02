@@ -68,7 +68,7 @@ func (x *Mobilenet) Infer(reqData *map[string]interface{}) (*map[string]interfac
 		return &map[string]interface{}{"code":2001}, err
 	}
 
-	tensor, err := makeTensorFromBytes(image)
+	tensor, err := makeTensorFromBytes(image, 224, 224, 127.5, 127.5, false)
 	if err!=nil {
 		return &map[string]interface{}{"code":2002}, err
 	}
