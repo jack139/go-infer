@@ -18,15 +18,20 @@ var (
 	// Receives the change in the number of goroutines
 	goroutineDelta = make(chan int)
 
-	guard = make(chan struct{}, helper.Settings.Redis.MAX_WORKERS)
+	// max go routinues
+	guard chan struct{}
 )
 
-func init(){
-	log.Println("Dispatcher init(), MAX_WORKERS=", helper.Settings.Redis.MAX_WORKERS)
-}
 
 // Start a Dispatcher server for model inference service
-func RunServer(queueNum string){
+func RunServer(queueNum, yaml string){
+	// 初始化配置文件
+	helper.InitSettings(yaml)
+
+	// 设置阻塞routinue的信号量
+	guard = make(chan struct{}, helper.Settings.Redis.MAX_WORKERS)
+	log.Println("Dispatcher MAX_WORKERS=", helper.Settings.Redis.MAX_WORKERS)
+
 	// 初始化模型
 	for m := range types.ModelList {
 		if err := types.ModelList[m].Init(); err != nil {

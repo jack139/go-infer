@@ -48,7 +48,9 @@ func TestHttp(t *testing.T) {
 	types.ModelList = append(types.ModelList, &EchoModel{})
 
 	// 启动 http
-	cli.HttpCmd.RunE(nil, nil)
+	cli.HttpCmd.SetArgs([]string{"--yaml=config/settings.yaml"})
+	cli.HttpCmd.Execute()
+
 }
 
 
@@ -58,5 +60,6 @@ func TestServer(t *testing.T) {
 	types.ModelList = append(types.ModelList, &EchoModel{})
 
 	// 启动 分发服务
-	cli.ServerCmd.RunE(nil, []string{"0"})
+	cli.ServerCmd.SetArgs([]string{"0", "--yaml=config/settings.yaml"})
+	cli.ServerCmd.Execute()
 }

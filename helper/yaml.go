@@ -52,23 +52,22 @@ type configYaml struct{
 
 // Settings read from local YAML setting file located in 'config/settings.yaml'
 var (
-	YamlFilepath = string("config/settings.yaml")
 	Settings = configYaml{}
 )
 
-func readSettings(){
-	config, err := ioutil.ReadFile(YamlFilepath)
+func readSettings(yamlFilepath string){
+	config, err := ioutil.ReadFile(yamlFilepath)
 	if err != nil {
 		log.Fatal("Read settings file FAIL: ", err)
 	}
 
 	yaml.Unmarshal(config, &Settings)
 
-	log.Println("Settings loaded: ", YamlFilepath)
+	log.Println("Settings loaded: ", yamlFilepath)
 }
 
-func init(){
-	readSettings()
+func InitSettings(yamlFilepath string){
+	readSettings(yamlFilepath)
 
 	// 初始化redis连接, 
 	// 不能在redis的init里初始化，要等装入参数才可以

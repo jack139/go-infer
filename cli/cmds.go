@@ -3,6 +3,7 @@ package cli
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"github.com/spf13/cobra"
 
@@ -16,8 +17,14 @@ var (
 		Use:   "http",
 		Short: "start http service",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// 取得参数
+			yaml, err := cmd.Flags().GetString("yaml")
+			if err!=nil {
+				log.Fatal(err)
+			}
+
 			// 启动 http 服务
-			http.RunServer()
+			http.RunServer(yaml)
 
 			return nil
 		},
@@ -37,10 +44,21 @@ var (
 				return fmt.Errorf("queue number should be a integer")
 			}
 
+			// 取得参数
+			yaml, err := cmd.Flags().GetString("yaml")
+			if err!=nil {
+				log.Fatal(err)
+			}
+
 			// 启动 分发服务
-			server.RunServer(args[0])
+			server.RunServer(args[0], yaml)
 
 			return nil
 		},
 	}
 )
+
+func init(){
+	HttpCmd.Flags().String("yaml", "config/settings.yaml", "yaml file path")
+	ServerCmd.Flags().String("yaml", "config/settings.yaml", "yaml file path")
+}
