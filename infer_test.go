@@ -30,10 +30,10 @@ func (x *EchoModel) ApiEntry(reqData *map[string]interface{}) (*map[string]inter
 	//return &map[string]interface{}{"code":9999}, fmt.Errorf("parameters error test") // 错误返回： 错误代码，错误信息
 }
 
-func (x *EchoModel) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
+func (x *EchoModel) Infer(requestId string, reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Model Infer()", x.ApiPath())
 
-	log.Println("infer return data: ", reqData)
+	log.Println("requestId", requestId, "infer return data: ", reqData)
 
 	time.Sleep(1 * time.Second) // 延时，模拟推理业务
 

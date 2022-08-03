@@ -68,7 +68,7 @@ func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interfa
 
 
 // Bert 推理
-func (x *BertEMB) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
+func (x *BertEMB) Infer(requestId string, reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Infer_BertQA")
 
 	const MaxSeqLength = 512

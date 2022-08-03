@@ -58,7 +58,7 @@ func (x *Mobilenet) ApiEntry(reqData *map[string]interface{}) (*map[string]inter
 
 
 // Mobilenet 推理
-func (x *Mobilenet) Infer(reqData *map[string]interface{}) (*map[string]interface{}, error) {
+func (x *Mobilenet) Infer(requestId string, reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Infer_Mobilenet")
 
 	imageBase64 := (*reqData)["image"].(string)

@@ -11,7 +11,7 @@ type Model interface {
 	// 模型初始化，装入权重等
 	Init() (error)
 	// 模型推理的过程
-	Infer(*map[string]interface{}) (*map[string]interface{}, error)
+	Infer(string, *map[string]interface{}) (*map[string]interface{}, error)
 }
 
 var (

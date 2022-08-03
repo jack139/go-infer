@@ -128,7 +128,7 @@ func porcessApi(payload string) (string, string, error) {
 			if !ok {
 				return requestId, "", fmt.Errorf("need params")
 			}
-			ret, err := types.ModelList[m].Infer(&params) // 模型推理
+			ret, err := types.ModelList[m].Infer(requestId, &params) // 模型推理
 			if err!=nil {
 				retJson["code"] = helper.Settings.ErrCode.INFER_FAIL["code"].(int)
 				retJson["msg"] = helper.Settings.ErrCode.INFER_FAIL["msg"].(string) + " : " + err.Error()
