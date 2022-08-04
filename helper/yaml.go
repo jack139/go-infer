@@ -14,7 +14,12 @@ type apiYaml struct {
 
 	/* 接口验签使用 appid : appsecret */
 	SECRET_KEY map[string]string `yaml:"AppIdSecret"` 
+
+	/* SM2私钥 */
 	SM2Private string `yaml:"SM2PrivateKey"`
+
+	/* api请求timestamp与服务器时间差异(秒)，大于差异绝对值将被拒绝 */
+	REQ_TIME_DIFF float64 `yaml:"RequestTimestampDiff"`
 }
 
 type serverYaml struct {

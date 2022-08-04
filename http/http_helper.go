@@ -122,7 +122,7 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 	}
 
 	// 调用时间不能超过前后5分钟
-	if math.Abs(float64(time.Now().Unix()-timestamp))>300 {
+	if math.Abs(float64(time.Now().Unix()-timestamp))>helper.Settings.Api.REQ_TIME_DIFF {
 		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL2["code"].(int)},
 			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL2["msg"].(string))
 	}
