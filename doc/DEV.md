@@ -37,7 +37,7 @@ type Model interface {
 
 
 
-### 4. 命令行集成
+### 2. 命令行集成
 
 框架提供命令行集成，可以集成到用户的命令行指令中：
 
@@ -58,13 +58,15 @@ rootCmd.AddCommand(cli.ServerCmd)
 
 
 
-### 5. 配置文件
+### 3. 配置文件
 
-具体可以参考[配置文件示例](../examples/config/settings.yaml)
+具体内容可以参考[配置文件示例](../examples/config/settings.yaml)。
+
+配置文件路径默认为```config/settings.yaml```。命令行server和http命令参数中可使用```--yaml```指定配置文件路径。
 
 
 
-### 6. 模型权重导出
+### 4. 模型权重导出
 
 #### (1) Tensorflow权重导出
 
@@ -78,7 +80,7 @@ rootCmd.AddCommand(cli.ServerCmd)
 
 
 
-### 7. 系统部署
+### 5. 系统部署
 
 #### (1) 本地测试
 
