@@ -14,10 +14,7 @@ import (
 
 
 // start a HTTP service of API
-func RunServer(yaml string) {
-	// 初始化配置文件
-	helper.InitSettings(yaml)
-
+func RunServer() {
 	// 初始化SM2的密钥
 	initSM2()
 

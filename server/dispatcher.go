@@ -24,10 +24,7 @@ var (
 
 
 // Start a Dispatcher server for model inference service
-func RunServer(queueNum, yaml string){
-	// 初始化配置文件
-	helper.InitSettings(yaml)
-
+func RunServer(queueNum string){
 	// 设置阻塞routinue的信号量
 	guard = make(chan struct{}, helper.Settings.Redis.MAX_WORKERS)
 	log.Println("Dispatcher MAX_WORKERS=", helper.Settings.Redis.MAX_WORKERS)
