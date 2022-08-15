@@ -41,4 +41,7 @@ Customer: { # 以下 key-value 为用户自定义使用
     "BertVocabPath" : "export/outputs/vocab.txt",
 
     "MobilenetModelPath" : "export/outputs/saved-model_keras",
+
+    # 人脸定位模型来自 https://github.com/deepinsight/insightface/tree/master/model_zoo
+    "FacedetModelPath" : "../../../cv/face_model/arcface/models/buffalo_l/det_10g.onnx",
 }

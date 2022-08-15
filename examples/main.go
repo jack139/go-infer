@@ -10,6 +10,7 @@ import (
 
 	"examples/models/embedding"
 	"examples/models/mobilenet"
+	"examples/models/facedet"
 )
 
 
@@ -24,6 +25,7 @@ func init() {
 	// 添加模型实例
 	types.ModelList = append(types.ModelList, &embedding.BertEMB{})
 	types.ModelList = append(types.ModelList, &mobilenet.Mobilenet{})
+	types.ModelList = append(types.ModelList, &facedet.FaceDet{})
 
 	// 命令行设置
 	rootCmd.CompletionOptions.DisableDefaultCmd = true

@@ -37,7 +37,7 @@ if __name__ == '__main__':
         }
     }
 
-    if api_path=="mobile":
+    if api_path in ["mobile", "facedet"]:
         body['data']['image'] = base64.b64encode(img_data).decode('utf-8')
 
     appid = '3EA25569454745D01219080B779F021F'
