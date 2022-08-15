@@ -84,10 +84,10 @@ func (x *FaceDet) Infer(requestId string, reqData *map[string]interface{}) (*map
 	}
 
 
-    img, _, err := image.Decode(bytes.NewReader(imgByte))
-    if err != nil {
-        return &map[string]interface{}{"code":2002}, err
-    }
+	img, _, err := image.Decode(bytes.NewReader(imgByte))
+	if err != nil {
+		return &map[string]interface{}{"code":2002}, err
+	}
 
 
 	shape1 := []int64{1, 3, det_model_input_size, det_model_input_size}
