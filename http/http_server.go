@@ -5,6 +5,7 @@ package http
 import (
 	"log"
 	"fmt"
+	"strings"
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 
@@ -23,8 +24,15 @@ func RunServer() {
 	r.GET("/", index)
 	/* 添加模型定义的api入口 */
 	for m := range types.ModelList {
-		r.POST(types.ModelList[m].ApiPath(), apiEntry)
-		log.Println("router added: ", types.ModelList[m].ApiPath())
+		uri := types.ModelList[m].ApiPath()
+		if strings.HasPrefix(uri, "__noapi__") {
+			// 不注册 noapi 的入口
+			log.Println("router skipped: ", uri)
+		} else {
+			// 注册 api 入口
+			r.POST(uri, apiEntry)
+			log.Println("router added: ", uri)
+		}
 	}
 
 	host := fmt.Sprintf("%s:%d", helper.Settings.Api.Addr, helper.Settings.Api.Port)
