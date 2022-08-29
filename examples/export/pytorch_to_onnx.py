@@ -15,7 +15,7 @@ dummy_input = torch.randn(1, 3, 224, 224)
 input_names = [ "actual_input" ]
 output_names = [ "output" ]
 
-# conver to onnx model
+# convert to onnx model
 torch.onnx.export(model, 
                   dummy_input,
                   "outputs/resnet50.onnx",
@@ -30,7 +30,7 @@ def to_numpy(tensor):
     return tensor.detach().cpu().numpy() if tensor.requires_grad else tensor.cpu().numpy()
 
 
-# test trun onnx model
+# test run onnx model
 onnx_session= onnxrt.InferenceSession("outputs/resnet50.onnx")
 onnx_inputs= {onnx_session.get_inputs()[0].name: to_numpy(dummy_input)}
 onnx_output = onnx_session.run(None, onnx_inputs)
