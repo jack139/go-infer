@@ -13,12 +13,12 @@
 - 服务端配置使用Yaml，分布式部署时可进行针对性配置
 - API验签支持SHA256和SM2算法
 - 模型示例
-  - BERT模型推理示例
-  - CNN模型推理示例
-  - Tensorflow模型权重转换示例
-  - Keras模型权重转换示例
-  - ONNX模型权重推理示例
-
+  - [BERT模型推理示例](examples/models/embedding)
+  - [CNN模型推理示例](examples/models/mobilenet)
+  - [Tensorflow模型权重转换示例](examples/export/export_tf_bert.py)
+  - [Keras模型权重转换示例](examples/export/export_keras_cnn.py)
+  - [ONNX模型权重推理示例](examples/models/facedet)
+  - [PyTorch模型转换为ONNX格式示例](examples/export/pytorch_to_onnx.py)
 
 
 
@@ -34,10 +34,3 @@
 2. [API文档模板](doc/API.md)
 3. [框架测试](doc/TEST.md)
 4. [Tensorflow运行环境](doc/TF.md)
-
-
-
-## TODO
-
-- [ ] PyTorch模型权重转换示例
-
