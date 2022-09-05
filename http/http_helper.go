@@ -249,10 +249,11 @@ func randSeq(n int) string {
 
 /* 产生 request id */
 func generateRequestId() string {
-	year, month, day := time.Now().Date()
+	//year, month, day := time.Now().Date()
+	dateStr := time.Now().Format("20060102150405")
 	h := md5.New()
 	h.Write([]byte(randSeq(10)))
 	sum := h.Sum(nil)
-	md5Str := fmt.Sprintf("%4d%02d%02d%x", year, month, day, sum)
+	md5Str := fmt.Sprintf("%s%x", dateStr, sum)
 	return md5Str
 }
