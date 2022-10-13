@@ -99,8 +99,9 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "appid")
 	}
 	if version, ok = fields["version"].(string); !ok {
-		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
-			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "version")
+		//return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},
+		//	fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL1["msg"].(string) + " : " + "version")
+		version = "1" // version 不做强制检查
 	}
 	if signType, ok = fields["signType"].(string); !ok {
 		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL1["code"].(int)},

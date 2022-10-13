@@ -27,7 +27,7 @@ if __name__ == '__main__':
         img_data = f.read()
 
     body = {
-        'version'  : '1',
+        #'version'  : '1',
         #'signType' : 'SHA256', 
         'signType' : 'SM2',
         'encType'  : 'plain',
