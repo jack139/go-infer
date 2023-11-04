@@ -34,3 +34,9 @@
 2. [API文档模板](doc/API.md)
 3. [框架测试](doc/TEST.md)
 4. [Tensorflow运行环境](doc/TF.md)
+
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=jack139/go-infer&type=Date)](https://star-history.com/#jack139/go-infer&Date)
