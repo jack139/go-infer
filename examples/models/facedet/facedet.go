@@ -54,6 +54,10 @@ func (x *FaceDet) ApiPath() string {
 	return "/api/facedet"
 }
 
+func (x *FaceDet) CustomQueue() string {
+	return ""
+}
+
 func (x *FaceDet) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("ApiEntry_FaceDet")
 

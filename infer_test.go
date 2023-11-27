@@ -21,6 +21,10 @@ func (x *EchoModel) Init() error {
 	return nil
 }
 
+func (x *EchoModel) CustomQueue() string {
+	return ""
+}
+
 func (x *EchoModel) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("Model ApiEntry()", x.ApiPath())
 

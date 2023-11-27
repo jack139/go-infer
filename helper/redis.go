@@ -54,7 +54,7 @@ func choose_queue_random() string {
 }
 
 // Publish request data to redis queue by request ID
-func Redis_publish_request(requestId string, data *map[string]interface{}) error {
+func Redis_publish_request(requestId string, queue string, data *map[string]interface{}) error {
 	msgBodyMap := map[string]interface{}{
 		"request_id": requestId,
 		"data": *data,
@@ -64,7 +64,10 @@ func Redis_publish_request(requestId string, data *map[string]interface{}) error
 		return err
 	}
 
-	queue := Settings.Redis.REDIS_QUEUENAME + choose_queue_random() // 多队列处理
+	if len(queue)==0 { // 长度为零，使用默认队列
+		queue = Settings.Redis.REDIS_QUEUENAME
+	}
+	queue = queue + choose_queue_random() // 多队列处理
 
 	//log.Println(queue, msgBodyMap)
 

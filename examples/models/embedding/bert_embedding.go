@@ -49,6 +49,10 @@ func (x *BertEMB) ApiPath() string {
 	return "/api/embedding"
 }
 
+func (x *BertEMB) CustomQueue() string {
+	return ""
+}
+
 func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("ApiEntry_BertEMB")
 

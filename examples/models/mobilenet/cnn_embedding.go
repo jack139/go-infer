@@ -39,6 +39,10 @@ func (x *Mobilenet) ApiPath() string {
 	return "/api/mobile"
 }
 
+func (x *Mobilenet) CustomQueue() string {
+	return ""
+}
+
 func (x *Mobilenet) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
 	log.Println("ApiEntry_Mobilenet")
 

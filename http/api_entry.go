@@ -56,7 +56,8 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 			defer pubsub.Close()
 
 			// 发 请求消息
-			err = helper.Redis_publish_request(requestId, &reqQueueDataMap)
+			queueName := types.ModelList[mIndex].CustomQueue()
+			err = helper.Redis_publish_request(requestId, queueName, &reqQueueDataMap)
 			if err!=nil {
 				respError(appId, requestId, ctx,
 					helper.Settings.ErrCode.SENDMSG_FAIL["code"].(int),
