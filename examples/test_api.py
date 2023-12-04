@@ -30,6 +30,7 @@ if __name__ == '__main__':
         #'version'  : '1',
         #'signType' : 'SHA256', 
         'signType' : 'SM2',
+        #'signType' : 'plain',
         'encType'  : 'plain',
         'data'     : {
             'image'    : "",
@@ -52,8 +53,10 @@ if __name__ == '__main__':
 
     if body['signType'] == 'SHA256':
         signature_str =  base64.b64encode(hashlib.sha256(sign_str.encode('utf-8')).hexdigest().encode('utf-8')).decode('utf-8')
-    else: # SM2
+    elif body['signType'] == 'SM2':
         signature_str = sm2.SM2withSM3_sign_base64(sign_str)
+    else: # plain
+        signature_str = ""
 
     body['signData'] = signature_str
 

@@ -188,6 +188,12 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 			return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL["code"].(int)},
 				fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL["msg"].(string))
 		}
+	case "plain":
+		if !helper.Settings.Api.AllowSignPlain {
+			// 返回 未知签名算法
+			return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL3["code"].(int)},
+				fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL3["msg"].(string))			
+		}
 	default: // 未知签名算法
 		return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL3["code"].(int)},
 			fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL3["msg"].(string))

@@ -20,6 +20,9 @@ type apiYaml struct {
 
 	/* api请求timestamp与服务器时间差异(秒)，大于差异绝对值将被拒绝 */
 	REQ_TIME_DIFF float64 `yaml:"RequestTimestampDiff"`
+
+	/* 是否允许 plain 签名（不验签） */
+	AllowSignPlain bool `yaml:"AllowSignPlain"`
 }
 
 type serverYaml struct {
