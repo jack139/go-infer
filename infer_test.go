@@ -10,7 +10,7 @@ import (
 )
 
 /*  定义模型相关参数和方法  */
-type EchoModel struct{}
+type EchoModel struct{ types.Base }
 
 func (x *EchoModel) ApiPath() string {
 	return "/api/echo"
@@ -19,10 +19,6 @@ func (x *EchoModel) ApiPath() string {
 func (x *EchoModel) Init() error {
 	log.Println("Model Init()", x.ApiPath())
 	return nil
-}
-
-func (x *EchoModel) CustomQueue() string {
-	return ""
 }
 
 func (x *EchoModel) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {

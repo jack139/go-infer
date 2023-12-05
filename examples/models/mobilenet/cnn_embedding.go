@@ -29,7 +29,7 @@ func initModel() error {
 
 
 /*  定义模型相关参数和方法  */
-type Mobilenet struct{}
+type Mobilenet struct{ types.Base }
 
 func (x *Mobilenet) Init() error {
 	return initModel()
@@ -37,10 +37,6 @@ func (x *Mobilenet) Init() error {
 
 func (x *Mobilenet) ApiPath() string {
 	return "/api/mobile"
-}
-
-func (x *Mobilenet) CustomQueue() string {
-	return ""
 }
 
 func (x *Mobilenet) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {

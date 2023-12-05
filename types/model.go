@@ -1,6 +1,15 @@
 // Package to provide base Model interface definition
 package types
 
+// 默认的功能实现
+type Base struct{}
+
+// 使用缺省队列，返回空串
+func (x *Base) CustomQueue() string {
+	return ""
+}
+
+
 // base Model interface definition
 type Model interface {
 	// 返回 api 的 http路径

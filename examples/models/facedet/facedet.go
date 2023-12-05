@@ -44,7 +44,7 @@ func initModel() error {
 
 
 /*  定义模型相关参数和方法  */
-type FaceDet struct{}
+type FaceDet struct{ types.Base }
 
 func (x *FaceDet) Init() error {
 	return initModel()
@@ -52,10 +52,6 @@ func (x *FaceDet) Init() error {
 
 func (x *FaceDet) ApiPath() string {
 	return "/api/facedet"
-}
-
-func (x *FaceDet) CustomQueue() string {
-	return ""
 }
 
 func (x *FaceDet) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {

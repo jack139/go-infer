@@ -39,7 +39,7 @@ func isAlpha(c byte) bool {
 
 
 /*  定义模型相关参数和方法  */
-type BertEMB struct{}
+type BertEMB struct{ types.Base }
 
 func (x *BertEMB) Init() error {
 	return initModel()
@@ -47,10 +47,6 @@ func (x *BertEMB) Init() error {
 
 func (x *BertEMB) ApiPath() string {
 	return "/api/embedding"
-}
-
-func (x *BertEMB) CustomQueue() string {
-	return ""
 }
 
 func (x *BertEMB) ApiEntry(reqData *map[string]interface{}) (*map[string]interface{}, error) {
