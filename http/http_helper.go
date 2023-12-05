@@ -169,7 +169,17 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 		} else if k == "timestamp" {
 			signString += k + "=" + strconv.FormatInt(timestamp, 10) + "&"
 		} else {
-			signString += k + "=" + fields[k].(string) + "&"
+			switch v:=fields[k].(type) {
+			case string:
+				signString += k + "=" + fields[k].(string) + "&"
+			case float64:
+				signString += k + "=" + strconv.FormatFloat(fields[k].(float64), 'g', -1, 64) + "&"
+			case map[string]interface{}:
+				str, _ := json.Marshal(fields[k])
+				signString += k + "=" + string(str) + "&"
+			default:
+				log.Println("Unknown field type: ", v)
+			}
 		}
 	}
 	signString += "key=" + secret

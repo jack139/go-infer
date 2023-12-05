@@ -9,9 +9,10 @@ urllib3.disable_warnings()
 # 生成参数字符串
 def gen_param_str(param1):
     param = param1.copy()
-    name_list = sorted(param.keys())
-    if 'data' in name_list: # data 按 key 排序, 中文不进行性转义，与go保持一致
-        param['data'] = json.dumps(param['data'], sort_keys=True, ensure_ascii=False, separators=(',', ':'))
+    name_list = sorted(param.keys()) # data 按 key 排序, 中文不进行性转义，与go保持一致
+    for key in name_list:
+        if type(param[key])==type({}):
+            param[key] = json.dumps(param[key], sort_keys=True, ensure_ascii=False, separators=(',', ':'))
     return '&'.join(['%s=%s'%(str(i), str(param[i])) for i in name_list if str(param[i])!=''])
 
 
@@ -35,7 +36,10 @@ if __name__ == '__main__':
         'data'     : {
             'image'    : "",
             'text'     : "测试测试",
-        }
+        },
+        'others1' : { "test" : [1,2,3] }, # 干扰项测试
+        'others2' : 1,
+        'others3' : 1.234567,
     }
 
     if api_path in ["mobile", "facedet"]:
@@ -49,7 +53,7 @@ if __name__ == '__main__':
     param_str = gen_param_str(body)
     sign_str = '%s&key=%s' % (param_str, '41DF0E6AE27B5282C07EF5124642A352')
 
-    #print(sign_str)
+    print(sign_str)
 
     if body['signType'] == 'SHA256':
         signature_str =  base64.b64encode(hashlib.sha256(sign_str.encode('utf-8')).hexdigest().encode('utf-8')).decode('utf-8')
