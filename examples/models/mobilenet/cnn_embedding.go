@@ -8,6 +8,7 @@ import (
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 
 	"github.com/jack139/go-infer/helper"
+	"github.com/jack139/go-infer/types"
 )
 
 /* 训练好的模型权重 */

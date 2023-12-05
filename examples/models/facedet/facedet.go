@@ -15,6 +15,7 @@ import (
 	"github.com/ivansuteja96/go-onnxruntime"
 
 	"github.com/jack139/go-infer/helper"
+	"github.com/jack139/go-infer/types"
 )
 
 const (
