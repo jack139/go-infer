@@ -54,7 +54,7 @@ func choose_queue_random() string {
 }
 
 // Publish request data to redis queue by request ID
-func Redis_publish_request(requestId string, queue string, data *map[string]interface{}) error {
+func redis_publish_request(requestId string, queue string, data *map[string]interface{}) error {
 	msgBodyMap := map[string]interface{}{
 		"request_id": requestId,
 		"data": *data,
@@ -76,12 +76,12 @@ func Redis_publish_request(requestId string, queue string, data *map[string]inte
 
 
 // Subscribe redis message by request ID
-func Redis_subscribe(requestId string) *redis.PubSub {
+func redis_subscribe(requestId string) *redis.PubSub {
 	return Rdb.Subscribe(context.Background(), requestId)
 }
 
 // Receive one message by provided *redis.pubsub
-func Redis_sub_receive(pubsub *redis.PubSub) (*map[string]interface{}, error) {
+func redis_sub_receive(pubsub *redis.PubSub) (*map[string]interface{}, error) {
 	var retBytes []byte
 	startTime := time.Now().Unix()
 	for {
@@ -113,4 +113,28 @@ func Redis_sub_receive(pubsub *redis.PubSub) (*map[string]interface{}, error) {
 	}
 
 	return &respData, nil
+}
+
+
+func Redis_call_service(requestId string, queueName string,
+		reqQueueDataMap *map[string]interface{}) (*map[string]interface{}, error) {
+
+	// 注册消息队列，在发redis消息前注册, 防止消息漏掉
+	pubsub := redis_subscribe(requestId)
+	defer pubsub.Close()
+
+	// 发 请求消息
+	//queueName := types.ModelList[mIndex].CustomQueue()
+	err := redis_publish_request(requestId, queueName, reqQueueDataMap)
+	if err!=nil {
+		return nil, err
+	}
+
+	// 收 结果消息, 会停留在这里，直到返回或超时
+	respData, err := redis_sub_receive(pubsub)
+	if err!=nil {
+		return nil, err
+	}
+
+	return respData, nil
 }

@@ -50,24 +50,12 @@ func apiEntry(ctx *fasthttp.RequestCtx) {
 				"params": *reqDataMap,
 			}
 
-
-			// 注册消息队列，在发redis消息前注册, 防止消息漏掉
-			pubsub := helper.Redis_subscribe(requestId)
-			defer pubsub.Close()
-
-			// 发 请求消息
-			queueName := types.ModelList[mIndex].CustomQueue()
-			err = helper.Redis_publish_request(requestId, queueName, &reqQueueDataMap)
-			if err!=nil {
-				respError(appId, requestId, ctx,
-					helper.Settings.ErrCode.SENDMSG_FAIL["code"].(int),
-					helper.Settings.ErrCode.SENDMSG_FAIL["msg"].(string) + " : " + err.Error(),
-				)
-				return
-			}
-
-			// 收 结果消息
-			respData, err := helper.Redis_sub_receive(pubsub)
+			// 调用服务
+			respData, err := helper.Redis_call_service(
+				requestId,
+				types.ModelList[mIndex].CustomQueue(), // queueName
+				&reqQueueDataMap,
+			)
 			if err!=nil {
 				respError(appId, requestId, ctx,
 					helper.Settings.ErrCode.RECVMSG_FAIL["code"].(int),
