@@ -22,7 +22,7 @@ type apiYaml struct {
 	REQ_TIME_DIFF float64 `yaml:"RequestTimestampDiff"`
 
 	/* 是否允许 plain 签名（不验签） */
-	AllowSignPlain bool `yaml:"AllowSignPlain"`
+	AllowSignPlain []string `yaml:"AllowSignPlain"`
 }
 
 type serverYaml struct {

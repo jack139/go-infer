@@ -79,6 +79,15 @@ func doJSONWrite(ctx *fasthttp.RequestCtx, code int, obj interface{}) {
 }
 
 
+func stringInSlice(a string, list []string) bool {
+    for _, b := range list {
+        if b == a {
+            return true
+        }
+    }
+    return false
+}
+
 /*
 	接口验签，返回data数据
 */
@@ -189,7 +198,7 @@ func checkSign(content []byte) (string, *map[string]interface{}, error) {
 				fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL["msg"].(string))
 		}
 	case "plain":
-		if !helper.Settings.Api.AllowSignPlain {
+		if !stringInSlice(appId, helper.Settings.Api.AllowSignPlain){
 			// 返回 未知签名算法
 			return "", &map[string]interface{}{"code":helper.Settings.ErrCode.SIGN_FAIL3["code"].(int)},
 				fmt.Errorf(helper.Settings.ErrCode.SIGN_FAIL3["msg"].(string))			

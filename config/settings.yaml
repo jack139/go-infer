@@ -6,9 +6,12 @@ API:
     SM2PrivateKey: "JShsBOJL0RgPAoPttEB1hgtPAvCikOl0V1oTOYL7k5U=" # SM2私钥
     AppIdSecret: { # 接口调用分配的 appid 和 sevret
         "3EA25569454745D01219080B779F021F" : "41DF0E6AE27B5282C07EF5124642A352",
+        "66A095861BAE55F8735199DBC45D3E8E" : "43E554621FF7BF4756F8C1ADF17F209C",
     }
     RequestTimestampDiff: 300 # api请求timestamp与服务器时间差异(秒)，大于差异绝对值将被拒绝
-    AllowSignPlain: false # 是否允许 plain 签名（不验签）
+    AllowSignPlain: [ # 是否允许 plain 签名（不验签）
+        #"3EA25569454745D01219080B779F021F",
+    ]
 
 # 推理服务队列的参数
 Server:
