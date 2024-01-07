@@ -1,5 +1,7 @@
 # Go framework for DL model inference and API deployment
 
+[中文](README_zh.md)
+
 Deep learning models are usually deployed in the cloud and external inference services are provided through APIs. This framework provides the basic architectural components for deploying APIs and achieves several goals:
 - The API processing module is decoupled from the model inference module to reduce the risk of network and computing blocking caused by high concurrency.
 - The API processing module and model inference module can be deployed in a distributed manner, and both can achieve horizontal expansion.
