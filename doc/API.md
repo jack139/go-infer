@@ -1,35 +1,35 @@
 
-## API文档
+## API documentation (template)
 
-### 1. 全局接口定义
+### 1. Global parameters definition
 
-输入参数
+Input parameters
 
-| 参数      | 类型   | 说明                          | 示例        |
-| --------- | ------ | ----------------------------- | ----------- |
-| appId     | string | 应用渠道编号                  |             |
-| version   | string | 版本号                        |             |
-| signType  | string | 签名算法，国密SM2或SHA256 | SM2或SHA256 |
-| signData  | string | 签名数据，具体算法见下文      |             |
-| encType   | string | 接口数据加密算法，目前不加密  | plain       |
-| timestamp | int    | unix时间戳（秒）              |             |
-| data      | json   | 接口数据，详见各接口定义      |             |
+| Parameters | Type   | Explanation            | Example |
+| ---------- | ------ | ---------------------- | ------- |
+| appId     | string | application ID          |         |
+| version   | string | version number          |         |
+| signType  | string | Signature algorithm     | SM2 or SHA256 |
+| signData  | string | Signature data, see below |            |
+| encType   | string | Data encryption algorithm | plain       |
+| timestamp | int    | unix timestamp (seconds)  |             |
+| data      | json   | Data, see each call definition for details  |         |
 
-> 签名/验签算法：
+> Signature/signature verification algorithm:
 >
-> 1. 筛选，获取参数键值对，剔除signData、encData、extra三个参数。data参数按key升序排列进行json序列化。
-> 2. 排序，按key升序排序。
-> 3. 拼接，按排序好的顺序拼接请求参数
+> 1. Filter: Get the parameter key-value pairs and eliminate the three parameters signData, encData, and extra. The data parameters are arranged in ascending order by key for json serialization.
+> 2. Sort: Sort by key in ascending order.
+> 3. Splicing: splicing request parameters in sorted order.
 >
-> ```key1=value1&key2=value2&...&key=appSecret```，key=appSecret固定拼接在参数串末尾，appSecret需替换成应用渠道所分配的appSecret。
+> ```key1=value1&key2=value2&...&key=appSecret```, key=appSecret is fixed at the end of the parameter string, and appSecret needs to be replaced with the appSecret assigned by the application channel.
 >
-> 4. 签名，使用指定的算法进行加签获取二进制字节，使用16进制进行编码得到签名字符串，然后base64编码。
-> 5. 验签，对收到的参数按1-4步骤签名，比对得到的签名串与提交的签名串是否一致。
+> 4. Signature: Use the specified algorithm to sign to obtain binary bytes, use hexadecimal encoding to obtain the signature string, and then base64 encode.
+> 5. Signature verification: Sign the received parameters according to steps 1-4, and compare whether the obtained signature string is consistent with the submitted signature string.
 
-签名示例：
+Signature example:
 
 ```
-请求参数：
+Request parameters:
 {
     "appId":"3EA25569454745D01219080B779F021F",
     "version": "1",
@@ -38,45 +38,45 @@
     "encType": "plain",
     "timestamp":1658716494,
     "data": {
-        "text":"测试测试",
+        "text":"test text",
         "image":""
     }
 }
 
-密钥：
+Keys:
 appSecret="41DF0E6AE27B5282C07EF5124642A352"
 SM2_privateKey="JShsBOJL0RgPAoPttEB1hgtPAvCikOl0V1oTOYL7k5U="
 
-待加签串：
-appId=3EA25569454745D01219080B779F021F&data={"image":"","text":"测试测试"}&encType=plain&signType=SHA256&timestamp=1658716494&version=1&key=41DF0E6AE27B5282C07EF5124642A352
+String to be signed:
+appId=3EA25569454745D01219080B779F021F&data={"image":"","text":"test text"}&encType=plain&signType=SHA256&timestamp=1658716494&version=1&key=41DF0E6AE27B5282C07EF5124642A352
 
-SHA256加签结果：
+SHA256 signature result:
 "a68c1b852a650314afaad684f3652c336c9b969e943825a29380b516de746ece"
 
-base64后结果：
+The result after base64:
 "YTY4YzFiODUyYTY1MDMxNGFmYWFkNjg0ZjM2NTJjMzM2YzliOTY5ZTk0MzgyNWEyOTM4MGI1MTZkZTc0NmVjZQ=="
 
-SM2加签结果（每次不同）：
+SM2 signature result (different each time):
 "ILSOY5A0/sfW5Y9T6rIjl1AEPlDtQeqtwAxLibNbnajlj2fY/DxvTuSok+sqxy2St4pvvs4/rdaNOCNpwBuJ6A=="
 ```
 
-返回结果
+Return results
 
-| 参数      | 类型    | 说明                                                         | 示例  |
+| Parameters | Type   | Explanation            | Example |
 | --------- | ------- | ------------------------------------------------------------ | ----- |
-| appId     | string  | 应用渠道编号                                                 |       |
-| code      | string  | 接口返回状态代码                                             |       |
-| signType  | string  | 签名算法，plain： 不用签名，                                | plain |
-| encType   | string  | 接口数据加密算法，目前不加密                                 | plain |
-| success   | boolean | 成功与否                                                     |       |
-| timestamp | int     | unix时间戳                                                   |       |
-| requestId | string  | 当次请求的标识id                                              |       |
-| data      | json    | 成功时返回结果数据；出错时，data.msg返回错误说明。详见具体接口 |       |
+| appId     | string  | application ID                                               |       |
+| code      | string  | returned status code                                         |       |
+| signType  | string  | Signature algorithm (no signature required)                 | plain |
+| encType   | string  | Data encryption algorithm (currently not encrypted)         | plain |
+| success   | boolean | success or failure                                          |       |
+| timestamp | int     | unix timestamp                                        |       |
+| requestId | string  | The ID of the current request                         |       |
+| data      | json    | data is returned when success, data.msg returns an error message when an error occurs |       |
 
-> 成功时：code为0， success为true，data内容见各接口定义；
-> 出错时：code返回错误代码，具体定义见各接口说明
+> When successful: code is 0, success is true, and the data content is defined in each interface;
+> When an error occurs: code returns an error code. For specific definitions, see the description of each interface.
 
-返回示例
+Return example
 
 ```json
 {
@@ -94,55 +94,55 @@ SM2加签结果（每次不同）：
 }
 ```
 
-全局出错代码
+Global error code
 
-| 编码 | 说明                               |
+| Error code | Explanation                  |
 | ---- | ---------------------------------- |
-| 9800 | 无效签名                           |
-| 9801 | 签名参数有错误                     |
-| 9802 | 调用时间错误，unixtime超出接受范围 |
+| 9800 | Invalid signature                   |
+| 9801 | An error in the signature parameters  |
+| 9802 | Unixtime is outside the acceptable range |
 
 
 
-### 2. example中获取文本特征
+### 2. Get text features in example
 
-> 获取文本embeddings
+> Get text embeddings
 >
-> 注意：
+> Note:
 >
-> 1. 只是演示，不保证结果准确
-> 2. 模型权重导出自官方中文Bert，具体见export目录
+> 1. This is just a demonstration, the results are not guaranteed to be accurate.
+> 2. Model weights are exported from the official Chinese Bert, see the export directory for details.
 
-请求URL
+Request URL
 
 > http://127.0.0.1:5000/api/embedding
 
-请求方式
+Request method
 
 > POST
 
-输入参数
+Input parameters
 
-| 参数  | 必选 | 类型   | 说明               |
+| Parameters | Required   | Type | Explanation   |
 | ----- | ---- | ------ | ------------------ |
-| text | 是   | string | 输入的文本 |
+| text | Yes   | string | Input text         |
 
-请求示例
+Request example
 
 ```json
 {
-    "text" : "测试测试"
+    "text" : "test text"
 }
 ```
 
-返回结果
+Return results
 
-| 参数       | 必选 | 类型   | 说明                 |
+| Parameters | Required   | Type | Explanation   |
 | ---------- | ---- | ------ | -------------------- |
-| embeddings     | 是   | float数组 | 输入文本的embeddings |
+| embeddings     | Yes   | float array | text embeddings |
 
 
-返回示例
+Return example
 
 ```json
 {
@@ -164,31 +164,31 @@ SM2加签结果（每次不同）：
 }
 ```
 
-### 3. example中获取图片特征
+### 3. Get image features in example
 
-> 使用Mobilenet获取图片embeddings
+> Use Mobilenet to get image embeddings
 >
-> 注意：
+> Note:
 >
-> 1. 只是演示，不保证结果准确
-> 2. 模型权重导出自Keras官方权重，具体见export目录
+> 1. This is just a demonstration, the results are not guaranteed to be accurate.
+> 2. Model weights are exported from Keras official weights, see the export directory for details.
 
-请求URL
+Request URL
 
 > http://127.0.0.1:5000/api/mobile
 
-请求方式
+Request method
 
 > POST
 
-输入参数
+Input parameters
 
-| 参数  | 必选 | 类型   | 说明               |
+| Parameters | Required   | Type | Explanation   |
 | ----- | ---- | ------ | ------------------ |
-| image | 是   | string | base64编码图片数据 |
-> 图片尺寸 224\*224
+| image | Yes   | string | base64 encoded image data |
+> size of the picture: 224\*224
 
-请求示例
+Request example
 
 ```json
 {
@@ -196,14 +196,14 @@ SM2加签结果（每次不同）：
 }
 ```
 
-返回结果
+Return results
 
-| 参数       | 必选 | 类型   | 说明                 |
+| Parameters | Required   | Type | Explanation   |
 | ---------- | ---- | ------ | -------------------- |
-| embeddings     | 是   | float数组 | 输入图片的embeddings |
+| embeddings     | Yes   | float array | image embeddings |
 
 
-返回示例
+Return example
 
 ```json
 {

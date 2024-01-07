@@ -1,8 +1,8 @@
-## 本地测试
+## Local test
 
 
 
-### 启动 dispatcher
+### Start the dispatcher
 
 ```
 go test -v -run TestServer
@@ -10,7 +10,7 @@ go test -v -run TestServer
 
 
 
-### 启动 http
+### Start the HTTP server for API
 
 ```
 go test -v -run TestHttp
@@ -18,7 +18,7 @@ go test -v -run TestHttp
 
 
 
-### 测试脚本
+### Test demo API
 
 ```
 cd examples

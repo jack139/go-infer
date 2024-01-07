@@ -1,90 +1,90 @@
-## 开发指南
+## Development Guide
 
-以下简述使用go-infer快速构建模型推理api、和部署的过程。具体代码可以参考[examples](../examples)目录下完整示例。
-
-
-
-### 1. 设计思路
-
-请求处理流程如下图。go-infer框架隐藏了API并发请求处理、推理请求序列化排队、Dispatcher分发服务等通用逻辑，用户开发时，只需要处理API请求所带的参数（API入口函数）和模型推理部分（模型推理函数）。
-
-<img src="arch2.png" alt="调用流程" width="300" />
+The following is a brief description of the process of using go-infer to quickly build a model inference API and deploy it. For specific codes, please refer to the complete examples in the [examples](../examples) directory.
 
 
 
-代码实现中，框架定义了一个简化的model interface，用户只要实现其下的方法函数，就可以由框架实现上图中的流程。model interface定义如下：
+### 1. Design ideas
+
+The request processing flow is as shown below. The go-infer framework hides common logic such as API concurrent request processing, inference request serialization queuing, and Dispatcher distribution services. When users develop, they only need to process the parameters of the API request (API entry function) and the model inference part (model inference function ).
+
+<img src="arch2.png" alt="Calling process" width="300" />
+
+
+
+In the code implementation, the framework defines a simplified model interface. As long as the user implements the method functions under it, the framework can implement the process in the above figure. The model interface is defined as follows:
 
 ```go
-// 模型接口定义
+// Model interface definition
 type Model interface {
-	ApiPath() (string) // HTTP URL 路径
-	ApiEntry(*map[string]interface{}) (*map[string]interface{}, error)  // 处理API参数的过程
-	Init() (error)  // 模型初始化，装入权重等
-	Infer(string, *map[string]interface{}) (*map[string]interface{}, error)  // 模型推理的过程
+	ApiPath() (string) // HTTP URL
+	ApiEntry(*map[string]interface{}) (*map[string]interface{}, error)  // Process of handling API parameters
+	Init() (error)  // Model initialization, loading weights, etc.
+	Infer(string, *map[string]interface{}) (*map[string]interface{}, error)  // The process of model inference
 }
 ```
 
 
 
-- ApiPath() 比较简单，返回API的URL路径字符串，在HTTP server启动时，会根据这个串注册URL服务。
-- ApiEntry() 用于对API传入的参数进行处理，通常根据业务逻辑对参数进行合法性检查。入参为一个key-value map，包含API传入的data字段的内容（API入参结构请参考[API文档模板](API.md)），返回值也是一个key-value map，包含传给推理函数的内容。
-- Init() 用于载入模型权重和模型初始化相关的工作，在Dispatcher server启动时，会被调用。
-- Infer() 用于实现具体的推理服务，入参是requestId和ApiEntry()处理过的参数数据，出参是将在API返回结果中data字段返回的内容。
+- ApiPath() is simple. It returns the URL path string of the API. When the HTTP server is started, the URL service will be registered based on this string.
+- ApiEntry() is used to process the parameters passed in by the API, and usually checks the validity of the parameters based on business logic. The input parameter is a key-value map, including the content of the data field passed in by the API (for the API input parameter structure, please refer to [API Document Template](API.md)), and the return value is also a key-value map, including the content passed to inference. The content of the function.
+- Init() is used to load model weights and model initialization related work. It will be called when the Dispatcher server starts.
+- Infer() is used to implement specific inference services. The input parameter is the parameter data processed by requestId and ApiEntry(), and the output parameter is the content returned in the data field in the API return result.
 
 
 
-具体示例可以参考[代码示例](../examples/models/embedding/bert_embedding.go)
+For specific examples, please refer to [code example](../examples/models/embedding/bert_embedding.go)
 
 
 
-### 2. 命令行集成
+### 2. Command line integration
 
-框架提供命令行集成，可以集成到用户的命令行指令中：
+The framework provides command line integration that can be integrated into the user's command line instructions:
 
 ```go
-// 添加模型实例
+// Add model instance
 types.ModelList = append(types.ModelList, &embedding.BertEMB{})
 
-// 命令行设置
+// Command line settings
 rootCmd.AddCommand(cli.HttpCmd)
 rootCmd.AddCommand(cli.ServerCmd)
 ```
 
-在添加命令行之前，要将上述实现的model interface添加到框架的ModelList中，框架会进行初始化和注册等工作，并在请求处理时找到对应的模型。
+Before adding the command line, add the model interface implemented above to the ModelList of the framework. The framework will perform initialization and registration, and find the corresponding model during request processing.
 
 
 
-具体可以参考[代码示例](../examples/main.go)
+For details, please refer to [code example](../examples/main.go)
 
 
 
-### 3. 配置文件
+### 3. Configuration
 
-具体内容可以参考[配置文件示例](../examples/config/settings.yaml)。
+For specific content, please refer to [configuration file example](../examples/config/settings.yaml)。
 
-配置文件路径默认为```config/settings.yaml```。命令行server和http命令参数中可使用```--yaml```指定配置文件路径。
-
-
-
-### 4. 模型权重导出
-
-#### (1) Tensorflow权重导出
-
-可参考[export_tf_bert.py](../examples/export/export_tf_bert.py)
+The configuration file path defaults to ```config/settings.yaml```. You can use ```--yaml``` to specify the configuration file path in the command line server and http command parameters.
 
 
 
-#### (2) Keras权重导出
+### 4. Model weight export
 
-可参考[export_keras_cnn.py](../examples/export/export_keras_cnn.py)
+#### (1) Tensorflow
+
+Please refer to [export_tf_bert.py](../examples/export/export_tf_bert.py)
 
 
 
-### 5. 系统部署
+#### (2) Keras
 
-#### (1) 本地测试
+Please refer to [export_keras_cnn.py](../examples/export/export_keras_cnn.py)
 
-编译
+
+
+### 5. Deployment
+
+#### (1) Local testing
+
+Compiling
 
 ```bash
 cd examples
@@ -93,7 +93,7 @@ make
 
 
 
-启动Dispatch分发和推理服务
+Start the Dispatcher and inference service
 
 ```bash
 build/go-embedding server 0
@@ -101,7 +101,7 @@ build/go-embedding server 0
 
 
 
-启动Http API服务
+Start HTTP API service
 
 ```bash
 build/go-embedding http
@@ -109,7 +109,7 @@ build/go-embedding http
 
 
 
-API测试
+API testing
 
 ```bash
 python3 test_api localhost mobile
@@ -117,34 +117,34 @@ python3 test_api localhost mobile
 
 
 
-#### (2) 分布式架构部署
+#### (2) Distributed architecture deployment
 
-go-infer框架已经实现了API并发处理（Http server）和推理模块（Dispatcher server）序列化执行，因此在实际应用部署中，主要考虑应对并发高峰期时的处理能力。当高峰期并发量不高时，可以选择单机部署，即将Http server和Dispatcher server部署在同一台物理服务器上。当高峰期并发量增加时，主要有3种方案提高并发处理能力（这里只考虑CPU环境的部署）：
+The go-infer framework has implemented serialized execution of API concurrent processing (Http server) and inference module (Dispatcher server). Therefore, in actual application deployment, the main consideration is the processing capability during peak concurrency periods. When concurrency is not high during peak periods, you can choose stand-alone deployment, that is, deploy the HTTP server and Dispatcher server on the same physical server. When the amount of concurrency increases during peak periods, there are three main options to improve concurrent processing capabilities (only the deployment of the CPU environment is considered here):
 
-1. 增加单台服务器的算力
-2. Http server、Dispatcher server和redis分别部署在3台不同的服务器上
-3. 在方案2基础上分析算力瓶颈，分别对Http server和Dispatcher进行横向扩展
-
-
-
-此处以方案3为例，进行示范，部署架构参考下图：
-
-<img src="arch.png" alt="分布式部署架构" width="300" />
+1. Increase the computing power of a single server.
+2. Http server, Dispatcher server and redis are deployed on 3 different servers respectively.
+3. Based on option 2, analyze the computing power bottleneck and horizontally expand the HTTP server and Dispatcher respectively.
 
 
 
-首先，假设部署环境：
+Here we take option 3 as an example for demonstration. Please refer to the following figure for the deployment architecture:
 
-1. nginx服务器1台（192.168.0.100）做API请求入口，并做负载均衡
-2. redis服务器1台（192.168.0.101）（考虑系统稳定性，可以部署redis集群，具体请参考redis文档）
-3. Http服务器2台（192.168.0.102, 192.168.0.103）提供API处理服务
-4. Dispatcher服务器4台（192.168.0.104, 192.168.0.105, 192.168.0.106, 192.168.0.107）
-
-其中，为了将API请求比较均衡的分发到推理服务器，建立两个redis队列，每个Http server关联一个队列，每个队列后端关联两台Dispather server。如此，每个Http server的并发请求由两个Dispatcher server进行处理。并且，每个Dispatcher server按CPU核心数量设置MaxWorkers参数。（假设服务器为8核心）
+<img src="arch.png" alt="Distributed deployment architecture" width="300" />
 
 
 
-> 注意：以下只是配置文件片段，其他内容需补充完整
+First, assume that the deployment environment is as follows:
+
+1. One nginx server (192.168.0.100) serves as the API request entry and performs load balancing
+2. One redis server (192.168.0.101) (Considering system stability, a redis cluster can be deployed. Please refer to the redis documentation for details)
+3. Two HTTP servers (192.168.0.102, 192.168.0.103) provide API processing services
+4. Four Dispatcher servers (192.168.0.104, 192.168.0.105, 192.168.0.106, 192.168.0.107)
+
+Among them, in order to distribute API requests to the inference server evenly, two redis queues are established, each HTTP server is associated with one queue, and each queue backend is associated with two Dispather servers. In this way, concurrent requests of each HTTP server are processed by two Dispatcher servers. Moreover, each Dispatcher server sets the MaxWorkers parameter according to the number of CPU cores. (assuming the server is 8 cores)
+
+
+
+> Note: The following is only a fragment of the configuration file, other content needs to be completed.
 
 
 
@@ -179,31 +179,31 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 
 
 
-##### 3. settings.yaml 共用配置
+##### 3. settings.yaml shared configuration
 
 ```yaml
-# HTTP 服务端参数
+# HTTP server parameters
 API:
     Port: 5000
     Addr: 0.0.0.0
-    SM2PrivateKey: "JShsBOJL0RgPAoPttEB1hgtPAvCikOl0V1oTOYL7k5U=" # SM2私钥
-    AppIdSecret: { # 接口调用分配的 appid 和 sevret
+    SM2PrivateKey: "JShsBOJL0RgPAoPttEB1hgtPAvCikOl0V1oTOYL7k5U=" # SM2 private key
+    AppIdSecret: { # The appid and secret assigned for the API calls
         "3EA25569454745D01219080B779F021F" : "41DF0E6AE27B5282C07EF5124642A352",
     }
 
-# 推理服务队列的参数
+# Parameters for the inference service queue
 Server:
     RedisServer: "127.0.0.1:7480"
     RedisPasswd: "e18ffb7484f4d69c2acb40008471a71c"
-    MessageTimeout: 10 # 推理计算最大等待时间
-    MaxWorkers: 8 # 模型推理最大并发数，与CPU核心数相同
+    MessageTimeout: 10 # Maximum waiting time for inference calls
+    MaxWorkers: 8 # Maximum number of concurrent inferences (recommended to be the same as the number of CPU cores)
 ```
 
 
 
 ##### 4. Http server 
 
-192.168.0.102 的settings.yaml
+settings.yaml at 192.168.0.102
 
 ```yaml
 Server:
@@ -212,14 +212,14 @@ Server:
 
 
 
-192.168.0.103 的settings.yaml
+settings.yaml at 192.168.0.103 
 
 ```yaml
 Server:
     QueueName: "goinfer-synchronous-asynchronous-queue_103"
 ```
 
-启动命令
+Start command
 
 ```bash
 build/go-embedding http
@@ -238,7 +238,7 @@ Server:
     QueueName: "goinfer-synchronous-asynchronous-queue_102"
 ```
 
-启动命令
+Start command
 
 ```bash
 build/go-embedding server 0
@@ -255,7 +255,7 @@ Server:
     QueueName: "goinfer-synchronous-asynchronous-queue_102"
 ```
 
-启动命令
+Start command
 
 ```bash
 build/go-embedding server 1
@@ -272,7 +272,7 @@ Server:
     QueueName: "goinfer-synchronous-asynchronous-queue_103"
 ```
 
-启动命令
+Start command
 
 ```bash
 build/go-embedding server 0
@@ -289,7 +289,7 @@ Server:
     QueueName: "goinfer-synchronous-asynchronous-queue_103"
 ```
 
-启动命令
+Start command
 
 ```bash
 build/go-embedding server 1
@@ -297,9 +297,8 @@ build/go-embedding server 1
 
 
 
-##### 6. 测试
+##### 6. Testing
 
 ```bash
 python3 test_api "192.168.0.100" mobile
 ```
-
