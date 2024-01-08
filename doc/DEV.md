@@ -1,14 +1,14 @@
 ## Development Guide
 
-The following is a brief description of the process of using go-infer to quickly build a model inference API and deploy it. For specific codes, please refer to the complete examples in the [examples](../examples) directory.
+The following is a brief description of the process of using go-infer to quickly build a model inference API and deploy it. For details, please refer to the complete examples in the [examples](../examples) directory.
 
 
 
 ### 1. Design ideas
 
-The request processing flow is as shown below. The go-infer framework hides common logic such as API concurrent request processing, inference request serialization queuing, and Dispatcher distribution services. When users develop, they only need to process the parameters of the API request (API entry function) and the model inference part (model inference function ).
+The request processing flow is as shown below. The go-infer framework hides common logic such as API concurrent request processing, inference request serialization queuing, and the Dispatcher distribution services. When users develop APIs, they only need to process the parameters of the API request (API entry function) and the model inference part (model inference function ).
 
-<img src="arch2.png" alt="Calling process" width="300" />
+<img src="arch2.png" alt="Calling process" width="500" />
 
 
 
@@ -26,7 +26,7 @@ type Model interface {
 
 
 
-- ApiPath() is simple. It returns the URL path string of the API. When the HTTP server is started, the URL service will be registered based on this string.
+- ApiPath() is simple. It returns the URL path string of the API. When the HTTP server is started, the URL service will be registered based on this URL path.
 - ApiEntry() is used to process the parameters passed in by the API, and usually checks the validity of the parameters based on business logic. The input parameter is a key-value map, including the content of the data field passed in by the API (for the API input parameter structure, please refer to [API Document Template](API.md)), and the return value is also a key-value map, including the content passed to inference. The content of the function.
 - Init() is used to load model weights and model initialization related work. It will be called when the Dispatcher server starts.
 - Infer() is used to implement specific inference services. The input parameter is the parameter data processed by requestId and ApiEntry(), and the output parameter is the content returned in the data field in the API return result.
@@ -129,7 +129,7 @@ The go-infer framework has implemented serialized execution of API concurrent pr
 
 Here we take option 3 as an example for demonstration. Please refer to the following figure for the deployment architecture:
 
-<img src="arch.png" alt="Distributed deployment architecture" width="300" />
+<img src="arch.png" alt="Distributed deployment architecture" width="500" />
 
 
 

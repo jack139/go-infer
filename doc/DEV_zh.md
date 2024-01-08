@@ -8,7 +8,7 @@
 
 请求处理流程如下图。go-infer框架隐藏了API并发请求处理、推理请求序列化排队、Dispatcher分发服务等通用逻辑，用户开发时，只需要处理API请求所带的参数（API入口函数）和模型推理部分（模型推理函数）。
 
-<img src="arch2.png" alt="调用流程" width="300" />
+<img src="arch2.png" alt="调用流程" width="500" />
 
 
 
@@ -129,7 +129,7 @@ go-infer框架已经实现了API并发处理（Http server）和推理模块（D
 
 此处以方案3为例，进行示范，部署架构参考下图：
 
-<img src="arch.png" alt="分布式部署架构" width="300" />
+<img src="arch.png" alt="分布式部署架构" width="500" />
 
 
 

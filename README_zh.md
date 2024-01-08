@@ -24,7 +24,7 @@
 
 ## 分布式部署架构
 
-<img src="doc/arch.png" alt="分布式部署架构" width="300" />
+<img src="doc/arch.png" alt="分布式部署架构" width="500" />
 
 
 
